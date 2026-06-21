@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - YFP Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-900 text-slate-300 min-h-screen flex hidden" id="body-content">
+    
+    <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col h-screen fixed z-20">
+        <div class="h-20 flex items-center px-8 border-b border-slate-700">
+            <h2 class="text-2xl font-extrabold text-white tracking-tighter">YFP<span class="text-indigo-500">.Admin</span></h2>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="#" id="menu-profil" class="sidebar-menu flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-400 rounded-xl font-bold transition-colors">
+                <i class="fa-solid fa-user w-5"></i> Profil Utama
+            </a>
+            <a href="#" id="menu-proyek" class="sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors">
+                <i class="fa-solid fa-layer-group w-5"></i> Kelola Proyek
+            </a>
+            </nav>
+        <div class="p-4 border-t border-slate-700">
+            <button id="btn-logout" class="flex items-center gap-3 px-4 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold transition-colors">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Keluar
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 ml-64 p-8">
+        
+        <div id="section-profil" class="content-section">
+            <header class="flex justify-between items-center mb-10">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Kelola Profil</h1>
+                    <p class="text-slate-400 mt-1">Ubah nama dan deskripsi utama portofolio lo di sini.</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+            </header>
+
+            <div class="bg-slate-800 p-8 rounded-[2rem] border border-slate-700 shadow-xl max-w-3xl">
+                <div id="profil-alert" class="hidden mb-6 p-4 rounded-xl text-sm font-bold flex items-center gap-3"></div>
+                <form id="form-profil" class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-semibold transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Deskripsi Utama</label>
+                        <textarea id="input-deskripsi" rows="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-medium transition-all resize-none"></textarea>
+                    </div>
+                    <div class="pt-4 border-t border-slate-700">
+                        <button type="submit" id="btn-save-profil" class="bg-indigo-600 text-white font-bold uppercase tracking-widest text-sm px-8 py-4 rounded-xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30">
+                            <i class="fa-solid fa-save mr-2"></i> Simpan Profil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="section-proyek" class="content-section hidden">
+            <header class="flex justify-between items-center mb-10">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Kelola Proyek</h1>
+                    <p class="text-slate-400 mt-1">Tambah, lihat, atau hapus proyek portofolio lo (Terintegrasi Cloudinary).</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+            </header>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-xl">
+                        <h3 class="text-lg font-bold text-white mb-6 border-b border-slate-700 pb-4">Tambah Proyek Baru</h3>
+                        <div id="proyek-alert" class="hidden mb-4 p-3 rounded-lg text-xs font-bold"></div>
+                        <form id="form-proyek" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Judul Proyek</label>
+                                <input type="text" id="p-judul" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Deskripsi</label>
+                                <textarea id="p-deskripsi" rows="3" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white resize-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Link Proyek (Opsional)</label>
+                                <input type="text" id="p-link" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Upload Gambar (Cloudinary)</label>
+                                <input type="file" id="p-gambar" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-500/10 file:text-indigo-400 hover:file:bg-indigo-500/20 cursor-pointer">
+                            </div>
+                            <button type="submit" id="btn-save-proyek" class="w-full mt-4 bg-indigo-600 text-white font-bold uppercase tracking-widest text-xs py-3 rounded-lg hover:bg-indigo-500 transition-all">
+                                Upload & Simpan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-xl min-h-[400px]">
+                        <h3 class="text-lg font-bold text-white mb-6 border-b border-slate-700 pb-4">Daftar Proyek</h3>
+                        <div id="list-proyek" class="space-y-4">
+                            <div class="text-center text-slate-500 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- 1. SESSION CHECKER ---
+        fetch('/api/check-session')
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    document.getElementById('body-content').classList.remove('hidden');
+                    loadProfilData();
+                    loadProyekData();
+                } else { window.location.href = '/admin'; }
+            }).catch(() => window.location.href = '/admin');
+
+        // --- 2. MENU SWITCHER LOGIC ---
+        const menuProfil = document.getElementById('menu-profil');
+        const menuProyek = document.getElementById('menu-proyek');
+        const secProfil = document.getElementById('section-profil');
+        const secProyek = document.getElementById('section-proyek');
+
+        function switchMenu(activeMenu, activeSection, inactiveMenu, inactiveSection) {
+            // Sembunyikan/Tampilkan Section
+            activeSection.classList.remove('hidden');
+            inactiveSection.classList.add('hidden');
+            // Ubah gaya tombol menu
+            activeMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-400 rounded-xl font-bold transition-colors";
+            inactiveMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors";
+        }
+
+        menuProfil.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProfil, secProfil, menuProyek, secProyek); });
+        menuProyek.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProyek, secProyek, menuProfil, secProfil); });
+
+
+        // --- 3. LOGIC PROFIL ---
+        function loadProfilData() {
+            fetch('/api/admin/profil').then(res => res.json()).then(data => {
+                if(data.status === 'success' && data.data) {
+                    document.getElementById('input-nama').value = data.data.nama;
+                    document.getElementById('input-deskripsi').value = data.data.deskripsi;
+                }
+            });
+        }
+
+        document.getElementById('form-profil').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-profil');
+            const alertBox = document.getElementById('profil-alert');
+            btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
+
+            fetch('/api/admin/profil', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nama: document.getElementById('input-nama').value,
+                    deskripsi: document.getElementById('input-deskripsi').value
+                })
+            }).then(res => res.json()).then(data => {
+                alertBox.classList.remove('hidden');
+                alertBox.className = data.status === 'success' 
+                    ? "mb-6 p-4 rounded-xl text-sm font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                    : "mb-6 p-4 rounded-xl text-sm font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                alertBox.innerText = data.message;
+                setTimeout(() => alertBox.classList.add('hidden'), 3000);
+            }).finally(() => { btn.innerHTML = '<i class="fa-solid fa-save mr-2"></i> Simpan Profil'; btn.disabled = false; });
+        });
+
+
+        // --- 4. LOGIC PROYEK (CRUD + CLOUDINARY) ---
+        function loadProyekData() {
+            fetch('/api/admin/proyek').then(res => res.json()).then(data => {
+                const list = document.getElementById('list-proyek');
+                list.innerHTML = '';
+                if(data.status === 'success' && data.data.length > 0) {
+                    data.data.forEach(p => {
+                        list.innerHTML += `
+                            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-700 flex gap-4 items-center">
+                                ${p.gambar ? `<img src="${p.gambar}" class="w-20 h-20 object-cover rounded-xl border border-slate-600">` : `<div class="w-20 h-20 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600"><i class="fa-solid fa-image"></i></div>`}
+                                <div class="flex-1">
+                                    <h4 class="text-white font-bold">${p.judul}</h4>
+                                    <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.deskripsi}</p>
+                                </div>
+                                <button onclick="deleteProyek(${p.id})" class="w-10 h-10 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl transition-colors flex items-center justify-center">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    list.innerHTML = '<p class="text-center text-slate-500 py-10">Belum ada proyek ditambahkan.</p>';
+                }
+            });
+        }
+
+        document.getElementById('form-proyek').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-proyek');
+            const alertBox = document.getElementById('proyek-alert');
+            const fileInput = document.getElementById('p-gambar');
+            
+            btn.innerText = 'Mengunggah...'; btn.disabled = true;
+            let imageUrl = '';
+
+            try {
+                // 1. Upload ke Cloudinary dulu (kalau ada file)
+                if (fileInput.files.length > 0) {
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    
+                    const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: formData });
+                    const uploadData = await uploadRes.json();
+                    
+                    if (uploadData.status === 'success') {
+                        imageUrl = uploadData.url;
+                    } else {
+                        throw new Error("Gagal upload gambar: " + uploadData.message);
+                    }
+                }
+
+                // 2. Simpan data ke TiDB
+                btn.innerText = 'Menyimpan Data...';
+                const dbRes = await fetch('/api/admin/proyek', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        judul: document.getElementById('p-judul').value,
+                        deskripsi: document.getElementById('p-deskripsi').value,
+                        link_proyek: document.getElementById('p-link').value,
+                        gambar: imageUrl
+                    })
+                });
+                const dbData = await dbRes.json();
+
+                if (dbData.status === 'success') {
+                    document.getElementById('form-proyek').reset();
+                    loadProyekData(); // Refresh daftar
+                    alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400";
+                    alertBox.innerText = "Proyek berhasil ditambahkan!";
+                } else { throw new Error(dbData.message); }
+
+            } catch (err) {
+                alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-rose-500/10 text-rose-400";
+                alertBox.innerText = err.message;
+            } finally {
+                alertBox.classList.remove('hidden');
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+                btn.innerText = 'Upload & Simpan'; btn.disabled = false;
+            }
+        });
+
+        function deleteProyek(id) {
+            if(confirm("Yakin mau hapus proyek ini?")) {
+                fetch(`/api/admin/proyek/${id}`, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.status === 'success') loadProyekData();
+                        else alert("Gagal menghapus: " + data.message);
+                    });
+            }
+        }
+
+        // --- 5. LOGOUT LOGIC ---
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            fetch('/api/logout', { method: 'POST' }).then(() => window.location.href = '/admin');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - YFP Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-900 text-slate-300 flex items-center justify-center min-h-screen selection:bg-indigo-500 selection:text-white">
+
+    <div class="w-full max-w-md p-8 bg-slate-800 rounded-[2rem] border border-slate-700 shadow-2xl relative overflow-hidden m-6">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        
+        <div class="text-center mb-10 relative z-10">
+            <div class="w-16 h-16 bg-slate-700 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl border border-slate-600 shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Admin Area</h1>
+            <p class="text-sm text-slate-400 mt-2">Masuk untuk mengelola portofolio</p>
+        </div>
+
+        <form id="login-form" class="space-y-6 relative z-10">
+            <div id="alert-box" class="hidden p-4 rounded-xl text-sm font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 text-center"></div>
+            
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Username</label>
+                <input type="text" id="username" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-medium placeholder-slate-600">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Password</label>
+                <input type="password" id="password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-medium placeholder-slate-600">
+            </div>
+            <button type="submit" id="btn-login" class="w-full bg-indigo-600 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30">
+                Masuk ke Dashboard
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            const alertBox = document.getElementById('alert-box');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    // Jika sukses login, arahkan ke halaman dashboard
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    alertBox.innerText = data.message;
+                    alertBox.classList.remove('hidden');
+                    btn.innerText = 'Masuk ke Dashboard';
+                    btn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

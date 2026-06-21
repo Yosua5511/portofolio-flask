@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yosua Fredrik Pratama - Portfolio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              400: '#818cf8', // indigo-400
+              500: '#6366f1', // indigo-500
+              600: '#4f46e5', // indigo-600
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.85); /* slate-900 with opacity */
+      border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1; 
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569; 
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8; 
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #64748b; 
+    }
+  </style>
+
+  <!-- Pre-apply dark mode if preference exists -->
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-300 font-sans flex flex-col min-h-screen selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full z-50 glass border-b border-slate-200 dark:border-white/5 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#hero" class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors">YFP.</a>
+      
+      <div class="flex items-center gap-4 md:hidden">
+        <!-- Mobile Toggles -->
+        <button id="mobileThemeToggle" class="text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 focus:outline-none transition-colors" aria-label="Toggle Dark Mode">
+          <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+          <i class="fa-solid fa-sun hidden dark:inline-block text-lg"></i>
+        </button>
+        <button id="mobileMenuBtn" class="text-slate-600 dark:text-slate-300 focus:outline-none hover:text-brand-600 dark:hover:text-brand-400 transition">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+
+      <div id="navLinks" class="hidden md:flex flex-col md:flex-row absolute md:static top-20 left-0 w-full md:w-auto bg-white/95 dark:bg-slate-900/95 md:bg-transparent md:dark:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-b border-slate-200 dark:border-white/5 md:border-none gap-6 md:gap-8 items-center p-6 md:p-0 shadow-lg md:shadow-none transition-all">
+        <a href="#about" class="lang-text text-sm font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-id="Tentang" data-en="About">Tentang</a>
+        <a href="#skills" class="lang-text text-sm font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-id="Keahlian" data-en="Skills">Keahlian</a>
+        <a href="#experience" class="lang-text text-sm font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-id="Pengalaman" data-en="Experience">Pengalaman</a>
+        <a href="#projects" class="lang-text text-sm font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-id="Proyek" data-en="Projects">Proyek</a>
+        <a href="#contact" class="lang-text text-sm font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-id="Kontak" data-en="Contact">Kontak</a>
+        
+        <div class="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden md:block"></div>
+        
+        <div class="flex items-center gap-4">
+          <!-- Language Toggle -->
+          <button id="langToggle" class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">ID / EN</button>
+          
+          <!-- Theme Toggle -->
+          <button id="themeToggle" class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 focus:outline-none transition-colors border border-transparent dark:border-slate-700" aria-label="Toggle Dark Mode">
+            <i class="fa-solid fa-moon dark:hidden"></i>
+            <i class="fa-solid fa-sun hidden dark:inline-block"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="pt-32 pb-24 md:pt-56 md:pb-40 px-6 flex items-center justify-center text-center relative overflow-hidden">
+    <!-- Subtle background blurs -->
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-500/10 dark:bg-brand-500/5 rounded-full blur-[120px] -z-10 translate-x-1/3 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[150px] -z-10 -translate-x-1/3 translate-y-1/3"></div>
+    
+    <div class="max-w-4xl mx-auto relative z-10 w-full">
+      <p id="hero-greeting" class="lang-text text-brand-600 dark:text-brand-400 font-bold tracking-[0.2em] uppercase mb-6 text-xs md:text-sm flex items-center justify-center gap-4" data-id="Halo, Saya" data-en="Hello, I am">
+        <span class="w-10 h-px bg-brand-600/50 dark:bg-brand-400/50"></span>Halo, Saya<span class="w-10 h-px bg-brand-600/50 dark:bg-brand-400/50"></span>
+      </p>
+      <h1 id="hero-name" class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-8 leading-[1.1] animate-pulse">Menghubungkan Server...</h1>
+      <p id="hero-role" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 font-light mb-12 leading-relaxed max-w-2xl mx-auto"></p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#projects" class="lang-text w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-slate-900 dark:bg-brand-600 text-white px-8 py-4 rounded-full font-bold uppercase tracking-wide text-sm hover:bg-brand-600 dark:hover:bg-brand-500 shadow-lg shadow-slate-200 dark:shadow-none transition-all transform hover:-translate-y-1" data-id="Lihat Proyek" data-en="View Projects">
+          Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#contact" class="lang-text w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-bold uppercase tracking-wide text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all transform hover:-translate-y-1 shadow-sm" data-id="Hubungi Saya" data-en="Contact Me">
+          Hubungi Saya
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 md:py-32 px-6 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-white/5 relative">
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <h2 class="lang-text text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight" data-id="Tentang Saya" data-en="About Me">Tentang Saya</h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full mb-10 opacity-80"></div>
+      <p id="about-desc" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-light"></p>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="py-24 md:py-32 px-6 bg-slate-50 dark:bg-slate-800/50 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="lang-text text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight" data-id="Keahlian Utama" data-en="Core Skills">Keahlian Utama</h2>
+        <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full opacity-80"></div>
+      </div>
+      <div id="skills-container" class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-24 md:py-32 px-6 bg-white dark:bg-slate-900 relative border-y border-slate-100 dark:border-white/5">
+    <div class="max-w-4xl mx-auto relative z-10 w-full">
+      <div class="text-center mb-20">
+        <h2 class="lang-text text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight" data-id="Pengalaman" data-en="Experience">Pengalaman</h2>
+        <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full text-center opacity-80"></div>
+      </div>
+      <div id="exp-container" class="relative pl-6 md:pl-0">
+          <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="py-24 md:py-32 px-6 bg-slate-50 dark:bg-slate-800/50 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="lang-text text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight" data-id="Proyek Terpilih" data-en="Featured Projects">Proyek Terpilih</h2>
+        <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full opacity-80"></div>
+      </div>
+      <div id="projects-container" class="grid md:grid-cols-2 gap-8 md:gap-10">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 md:py-32 px-6 bg-white dark:bg-slate-900 relative">
+    <div class="max-w-3xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="lang-text text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight" data-id="Mari Berdiskusi" data-en="Let's Talk">Mari Berdiskusi</h2>
+        <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full mb-8 opacity-80"></div>
+        <p class="lang-text text-lg text-slate-600 dark:text-slate-400 font-light" data-id="Punya proyek atau peluang kerja sama? Silakan kirimkan pesan melalui form di bawah ini." data-en="Have a project or collaboration in mind? Feel free to send a message using the form below.">Punya proyek atau peluang kerja sama? Silakan kirimkan pesan melalui form di bawah ini.</p>
+      </div>
+      <div class="bg-slate-50 dark:bg-slate-800 p-8 md:p-12 rounded-[2rem] border border-slate-200 dark:border-slate-700 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden">
+        
+        <div id="alert-box" class="hidden mb-8 p-5 rounded-xl text-sm font-bold"></div>
+        
+        <form id="contact-form" class="space-y-6 relative z-10">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 lang-text" data-id="Nama Lengkap" data-en="Full Name">Nama Lengkap</label>
+              <input type="text" id="f-nama" required class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition text-slate-900 dark:text-white font-medium placeholder-slate-400 dark:placeholder-slate-500" placeholder="John Doe" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Email</label>
+              <input type="email" id="f-email" required class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition text-slate-900 dark:text-white font-medium placeholder-slate-400 dark:placeholder-slate-500" placeholder="john@example.com" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 lang-text" data-id="Pesan Anda" data-en="Your Message">Pesan Anda</label>
+            <textarea id="f-pesan" rows="5" required class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition resize-none text-slate-900 dark:text-white font-medium placeholder-slate-400 dark:placeholder-slate-500" placeholder="..."></textarea>
+          </div>
+          <button type="submit" id="btn-submit" class="lang-text w-full bg-slate-900 dark:bg-brand-600 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:bg-brand-600 dark:hover:bg-brand-500 transition-all transform hover:-translate-y-0.5 shadow-md" data-id="Kirim Pesan" data-en="Send Message">
+            Kirim Pesan
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 border-t border-slate-200 dark:border-white/5 text-center text-slate-500 dark:text-slate-400 text-sm bg-slate-50 dark:bg-slate-900">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-xl font-extrabold tracking-tighter text-slate-900 dark:text-white">YFP.</span>
+      <p class="font-medium tracking-wide">&copy; <span id="currentYear"></span> Yosua Fredrik Pratama. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // --- Theme Setup & Toggle ---
+      const themeToggleBtn = document.getElementById('themeToggle');
+      const mobileThemeToggleBtn = document.getElementById('mobileThemeToggle');
+
+      const toggleTheme = () => {
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+      };
+
+      themeToggleBtn.addEventListener('click', toggleTheme);
+      mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+
+      // --- Mobile Menu Setup ---
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      mobileBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('hidden');
+      });
+      
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 768) {
+            navLinks.classList.add('hidden');
+          }
+        });
+      });
+
+      // --- Bilingual Features (Vanilla JS) ---
+      let currentLang = 'id';
+      const langToggle = document.getElementById('langToggle');
+      const langElements = document.querySelectorAll('.lang-text');
+      let portfolioData = null;
+
+      langToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentLang = currentLang === 'id' ? 'en' : 'id';
+        
+        langElements.forEach(el => {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            if(el.hasAttribute('data-' + currentLang)) {
+                el.placeholder = el.getAttribute('data-' + currentLang);
+            }
+          } else {
+            el.innerHTML = el.getAttribute('data-' + currentLang);
+          }
+        });
+
+        // Special handling for button with icon
+        const heroBtn = document.querySelector('a[href="#projects"]');
+        if (heroBtn) {
+           heroBtn.innerHTML = (currentLang === 'id' ? 'Lihat Proyek' : 'View Projects') + ' <i class="fa-solid fa-arrow-right"></i>';
+        }
+        
+        renderDynamicBilingualContent();
+      });
+
+      // --- Fetch Data from Backend API ---
+      fetch('/api/data')
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === 'success') {
+            portfolioData = res.data;
+            renderInitialData();
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load portfolio data:", err);
+          document.getElementById('hero-name').innerText = "Oops, failed to fetch.";
+          document.getElementById('hero-name').classList.remove('animate-pulse');
+        });
+
+      function renderInitialData() {
+        if (!portfolioData) return;
+        const p = portfolioData.profil;
+        
+        const hName = document.getElementById('hero-name');
+        hName.innerText = p.nama;
+        hName.classList.remove('animate-pulse');
+
+        const skillsContainer = document.getElementById('skills-container');
+        skillsContainer.innerHTML = portfolioData.skills.map((s, idx) => `
+          <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
+            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-brand-500 group-hover:text-white dark:group-hover:bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl transition-colors duration-300">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s.nama_skill}</h3>
+          </div>
+        `).join('');
+
+        renderDynamicBilingualContent();
+      }
+
+      function renderDynamicBilingualContent() {
+        if (!portfolioData) return;
+        const p = portfolioData.profil;
+        
+        const roleHtml = currentLang === 'id' 
+            ? `Mahasiswa Sistem Informasi <br class="md:hidden"/> di <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>` 
+            : `Information Systems Student <br class="md:hidden"/> at <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>`;
+        
+        document.getElementById('hero-role').innerHTML = roleHtml;
+        document.getElementById('about-desc').innerText = p.deskripsi;
+
+        const expContainer = document.getElementById('exp-container');
+        expContainer.innerHTML = portfolioData.pengalaman.map((e, index) => `
+          <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
+            <!-- Desktop Layout -->
+            <div class="hidden md:block md:w-1/2 text-right pt-2">
+              <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${e.posisi}</h3>
+              <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.institusi} &bull; ${e.tahun}</p>
+            </div>
+
+            <!-- Custom Timeline Line & Dot -->
+            <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-900 transform md:-translate-x-1/2 z-10 top-2 md:top-3 group-hover:bg-brand-500 group-hover:border-brand-200 dark:group-hover:border-brand-900 transition-colors duration-300"></div>
+            <div class="absolute left-[7px] md:left-1/2 top-4 bottom-[-56px] w-[2px] bg-slate-200 dark:bg-slate-800 transform md:-translate-x-1/2 -z-10 group-last:hidden"></div>
+            
+            <!-- Mobile Layout Container inside right column -->
+            <div class="md:w-1/2 bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300">
+               <div class="md:hidden mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
+                 <h3 class="text-xl font-bold text-slate-900 dark:text-white">${e.posisi}</h3>
+                 <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.institusi} &bull; ${e.tahun}</p>
+               </div>
+               <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">
+                 ${e.deskripsi}
+               </p>
+            </div>
+          </div>
+        `).join('');
+
+        const projContainer = document.getElementById('projects-container');
+        const icons = ['fa-layer-group', 'fa-database'];
+        
+        projContainer.innerHTML = portfolioData.proyek.map((project, i) => `
+          <div class="bg-white dark:bg-slate-800 rounded-3xl p-10 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
+            <div class="w-14 h-14 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 text-xl group-hover:bg-brand-500 group-hover:text-white group-hover:border-transparent transition-colors duration-300">
+              <i class="fa-solid ${icons[i%2]}"></i>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${project.judul}</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">
+               ${project.deskripsi}
+            </p>
+            
+            <div class="flex flex-wrap gap-2 mt-auto">
+              ${project.link_proyek ? `<span class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide shadow-sm"><i class="fa-solid fa-link mr-1"></i> ${project.link_proyek}</span>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // --- Contact Form Submission Handler ---
+      const contactForm = document.getElementById('contact-form');
+      const btnSubmit = document.getElementById('btn-submit');
+      const alertBox = document.getElementById('alert-box');
+
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const originalText = btnSubmit.innerText;
+        btnSubmit.innerHTML = currentLang === 'id' ? '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...' : '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending...';
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
+
+        const payload = {
+          nama: document.getElementById('f-nama').value,
+          email: document.getElementById('f-email').value,
+          pesan: document.getElementById('f-pesan').value
+        };
+
+        fetch('/api/kirim-pesan', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(res => {
+           alertBox.className = "mb-8 p-4 rounded-xl text-sm font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 flex items-center gap-3";
+           alertBox.innerHTML = '<i class="fa-solid fa-check-circle text-lg"></i> <span>' + (res.message || (currentLang === 'id' ? 'Pesan berhasil dikirim! Terima kasih.' : 'Message sent successfully! Thank you.')) + '</span>';
+           contactForm.reset();
+           
+           setTimeout(() => {
+             alertBox.className = "hidden";
+           }, 6000);
+        })
+        .catch(err => {
+           alertBox.className = "mb-8 p-4 rounded-xl text-sm font-bold bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 flex items-center gap-3";
+           alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation text-lg"></i> <span>' + (currentLang === 'id' ? 'Terjadi kesalahan saat mengirim pesan.' : 'An error occurred while sending.') + '</span>';
+        })
+        .finally(() => {
+           btnSubmit.innerText = originalText;
+           btnSubmit.disabled = false;
+           btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
