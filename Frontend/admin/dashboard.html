@@ -22,7 +22,7 @@
             <a href="#" id="menu-proyek" class="sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors">
                 <i class="fa-solid fa-layer-group w-5"></i> Kelola Proyek
             </a>
-            </nav>
+        </nav>
         <div class="p-4 border-t border-slate-700">
             <button id="btn-logout" class="flex items-center gap-3 px-4 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold transition-colors">
                 <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Keluar
@@ -117,16 +117,39 @@
     </main>
 
     <script>
-        // --- 1. SESSION CHECKER ---
+        // --- 1. SESSION CHECKER (Telah Disesuaikan untuk GitHub Pages) ---
         fetch('/api/check-session')
             .then(res => res.json())
             .then(data => {
+                // Berhasil jalan di localhost
                 if(data.status === 'success') {
                     document.getElementById('body-content').classList.remove('hidden');
                     loadProfilData();
                     loadProyekData();
-                } else { window.location.href = '/admin'; }
-            }).catch(() => window.location.href = '/admin');
+                } else { 
+                    // Kalau gagal tapi dari localhost
+                    window.location.href = '/admin'; 
+                }
+            })
+            .catch(() => {
+                // MODE PAJANGAN GITHUB PAGES (Backend Mati)
+                document.getElementById('body-content').classList.remove('hidden');
+                
+                // Isi dummy data biar gak kosong melompong
+                document.getElementById('input-nama').value = "Yosua Fredrik Pratama";
+                document.getElementById('input-deskripsi').value = "Mahasiswa Sistem Informasi di Universitas Kristen Satya Wacana dengan ketertarikan mendalam pada pengembangan website, UI/UX design, dan implementasi database.";
+                
+                const list = document.getElementById('list-proyek');
+                list.innerHTML = `
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-rose-500/30 flex gap-4 items-center">
+                        <div class="w-20 h-20 bg-rose-500/10 rounded-xl flex items-center justify-center text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="flex-1">
+                            <h4 class="text-rose-400 font-bold">Mode GitHub Pages Statis</h4>
+                            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Ini adalah mode demonstrasi UI. Untuk menggunakan fitur CRUD, koneksi database, dan upload Cloudinary, jalankan melalui Python localhost:5000.</p>
+                        </div>
+                    </div>
+                `;
+            });
 
         // --- 2. MENU SWITCHER LOGIC ---
         const menuProfil = document.getElementById('menu-profil');
@@ -135,17 +158,14 @@
         const secProyek = document.getElementById('section-proyek');
 
         function switchMenu(activeMenu, activeSection, inactiveMenu, inactiveSection) {
-            // Sembunyikan/Tampilkan Section
             activeSection.classList.remove('hidden');
             inactiveSection.classList.add('hidden');
-            // Ubah gaya tombol menu
             activeMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-400 rounded-xl font-bold transition-colors";
             inactiveMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors";
         }
 
         menuProfil.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProfil, secProfil, menuProyek, secProyek); });
         menuProyek.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProyek, secProyek, menuProfil, secProfil); });
-
 
         // --- 3. LOGIC PROFIL ---
         function loadProfilData() {
@@ -177,9 +197,14 @@
                     : "mb-6 p-4 rounded-xl text-sm font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
                 alertBox.innerText = data.message;
                 setTimeout(() => alertBox.classList.add('hidden'), 3000);
+            }).catch(() => {
+                // MOCK SUCCESS UNTUK GITHUB PAGES
+                alertBox.classList.remove('hidden');
+                alertBox.className = "mb-6 p-4 rounded-xl text-sm font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20";
+                alertBox.innerText = "Fitur Simpan hanya aktif di backend localhost.";
+                setTimeout(() => alertBox.classList.add('hidden'), 3000);
             }).finally(() => { btn.innerHTML = '<i class="fa-solid fa-save mr-2"></i> Simpan Profil'; btn.disabled = false; });
         });
-
 
         // --- 4. LOGIC PROYEK (CRUD + CLOUDINARY) ---
         function loadProyekData() {
@@ -214,25 +239,18 @@
             const fileInput = document.getElementById('p-gambar');
             
             btn.innerText = 'Mengunggah...'; btn.disabled = true;
-            let imageUrl = '';
 
             try {
-                // 1. Upload ke Cloudinary dulu (kalau ada file)
+                let imageUrl = '';
                 if (fileInput.files.length > 0) {
                     const formData = new FormData();
                     formData.append('file', fileInput.files[0]);
-                    
                     const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: formData });
                     const uploadData = await uploadRes.json();
-                    
-                    if (uploadData.status === 'success') {
-                        imageUrl = uploadData.url;
-                    } else {
-                        throw new Error("Gagal upload gambar: " + uploadData.message);
-                    }
+                    if (uploadData.status === 'success') { imageUrl = uploadData.url; } 
+                    else { throw new Error("Gagal upload gambar: " + uploadData.message); }
                 }
 
-                // 2. Simpan data ke TiDB
                 btn.innerText = 'Menyimpan Data...';
                 const dbRes = await fetch('/api/admin/proyek', {
                     method: 'POST',
@@ -248,14 +266,15 @@
 
                 if (dbData.status === 'success') {
                     document.getElementById('form-proyek').reset();
-                    loadProyekData(); // Refresh daftar
+                    loadProyekData(); 
                     alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400";
                     alertBox.innerText = "Proyek berhasil ditambahkan!";
                 } else { throw new Error(dbData.message); }
 
             } catch (err) {
-                alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-rose-500/10 text-rose-400";
-                alertBox.innerText = err.message;
+                // MOCK ERROR GITHUB PAGES
+                alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20";
+                alertBox.innerText = "Fitur Upload & Database hanya jalan di localhost.";
             } finally {
                 alertBox.classList.remove('hidden');
                 setTimeout(() => alertBox.classList.add('hidden'), 4000);
@@ -276,7 +295,8 @@
 
         // --- 5. LOGOUT LOGIC ---
         document.getElementById('btn-logout').addEventListener('click', () => {
-            fetch('/api/logout', { method: 'POST' }).then(() => window.location.href = '/admin');
+            fetch('/api/logout', { method: 'POST' }).then(() => window.location.href = '/admin')
+            .catch(() => alert("Berjalan di mode statis, logout tidak diperlukan."));
         });
     </script>
 </body>
