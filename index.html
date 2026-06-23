@@ -40,7 +40,7 @@
 
   <nav class="fixed top-0 w-full z-50 glass border-b border-slate-200 dark:border-white/5 transition-all duration-300">
     <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="#" onclick="window.location.href = window.location.hostname.includes('github.io') ? 'Frontend/admin/login.html' : '/admin'; return false;" class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors" title="Masuk ke Admin Panel">YFP.</a>
+      <a href="#" onclick="goToAdmin(event)" class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors" title="Masuk ke Admin Panel">YFP.</a>
       
       <div class="flex items-center gap-4 md:hidden">
         <button id="mobileThemeToggle" class="text-slate-500 dark:text-slate-400 hover:text-brand-600 focus:outline-none transition-colors">
@@ -170,6 +170,16 @@
   </footer>
 
   <script>
+    // --- FUNGSI ROUTING RAHASIA ---
+    window.goToAdmin = function(e) {
+        e.preventDefault();
+        if (window.location.hostname.includes('github.io')) {
+            window.location.href = '/portofolio-flask/Frontend/admin/login.html';
+        } else {
+            window.location.href = '/admin';
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -217,17 +227,87 @@
         renderDynamicBilingualContent();
       });
 
-      // --- LOGIKA FETCH DATA UTAMA (TIDB vs GITHUB PAGES) ---
-      fetch('/api/data')
-        .then(res => res.json())
-        .then(res => {
-          if (res.status === 'success') {
-            portfolioData = res.data;
-            renderInitialData();
+      // --- FETCH DATA FULL DARI SERVER ---
+      // (Sekarang menarik Profil, Pengalaman, Proyek, dan Skills secara bersamaan)
+      
+      // Ambil Data Profil Utama
+      fetch('/api/admin/profil').then(res => res.json()).then(res => {
+          if (res.status === 'success' && res.data) {
+              const p = res.data;
+              document.getElementById('hero-name').innerText = p.nama;
+              document.getElementById('hero-name').classList.remove('animate-pulse');
+              document.getElementById('about-desc').innerText = p.deskripsi;
+              
+              const roleHtml = currentLang === 'id' 
+                ? `Mahasiswa Sistem Informasi <br class="md:hidden"/> di <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>` 
+                : `Information Systems Student <br class="md:hidden"/> at <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>`;
+              document.getElementById('hero-role').innerHTML = roleHtml;
           }
-        })
-        .catch(err => {
-            console.warn("Mode Github Pages: Memuat Dummy Data");
+      }).catch(err => runGithubPagesMock()); // Jika gagal (di Github), panggil Mockup
+
+      // Ambil Data Pengalaman
+      fetch('/api/admin/pengalaman').then(res => res.json()).then(res => {
+          if(res.status === 'success' && res.data) {
+              const expContainer = document.getElementById('exp-container');
+              expContainer.innerHTML = res.data.map((e) => `
+                <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
+                  <div class="hidden md:block md:w-1/2 text-right pt-2">
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">${e.jabatan}</h3>
+                    <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
+                  </div>
+                  <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-900 transform md:-translate-x-1/2 z-10 top-2 md:top-3 group-hover:bg-brand-500 transition-colors duration-300"></div>
+                  <div class="absolute left-[7px] md:left-1/2 top-4 bottom-[-56px] w-[2px] bg-slate-200 dark:bg-slate-800 transform md:-translate-x-1/2 -z-10 group-last:hidden"></div>
+                  <div class="md:w-1/2 bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300">
+                     <div class="md:hidden mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
+                       <h3 class="text-xl font-bold text-slate-900 dark:text-white">${e.jabatan}</h3>
+                       <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
+                     </div>
+                     <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">${e.deskripsi}</p>
+                  </div>
+                </div>
+              `).join('');
+          }
+      });
+
+      // Ambil Data Skills
+      fetch('/api/admin/skills').then(res => res.json()).then(res => {
+          if(res.status === 'success' && res.data) {
+              const skillsContainer = document.getElementById('skills-container');
+              skillsContainer.innerHTML = res.data.map((s) => `
+                <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
+                  <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-brand-500 group-hover:text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl transition-colors duration-300">
+                    <i class="${s.icon ? s.icon : 'fa-solid fa-bolt'}"></i>
+                  </div>
+                  <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s.nama_skill}</h3>
+                </div>
+              `).join('');
+          }
+      });
+
+      // Ambil Data Proyek
+      fetch('/api/admin/proyek').then(res => res.json()).then(res => {
+          if(res.status === 'success' && res.data) {
+              const projContainer = document.getElementById('projects-container');
+              projContainer.innerHTML = res.data.map((project) => `
+                <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
+                  <div class="h-48 w-full bg-slate-100 dark:bg-slate-700 overflow-hidden border-b border-slate-100 dark:border-slate-700">
+                      ${project.gambar ? `<img src="${project.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-image text-4xl text-slate-300 dark:text-slate-600"></i></div>`}
+                  </div>
+                  <div class="p-8 flex-1 flex flex-col">
+                      <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 transition-colors">${project.judul}</h3>
+                      <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">${project.deskripsi}</p>
+                      <div class="flex flex-wrap gap-2 mt-auto">
+                      ${project.link_proyek ? `<a href="${project.link_proyek}" target="_blank" class="bg-brand-50 hover:bg-brand-100 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-sm transition-colors"><i class="fa-solid fa-link mr-1"></i> Buka Project</a>` : ''}
+                      </div>
+                  </div>
+                </div>
+              `).join('');
+          }
+      });
+
+      // --- MOCKUP UNTUK GITHUB PAGES (JIKA PYTHON MATI) ---
+      function runGithubPagesMock() {
+            console.warn("Menjalankan dalam Mode Statis (GitHub Pages).");
 
             document.getElementById('hero-name').innerText = "Yosua Fredrik Pratama";
             document.getElementById('hero-name').classList.remove('animate-pulse');
@@ -236,13 +316,16 @@
                 : 'Information Systems Student <br class="md:hidden"/> at <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>';
             document.getElementById('about-desc').innerText = "Mahasiswa Sistem Informasi di Universitas Kristen Satya Wacana dengan ketertarikan mendalam pada pengembangan website, UI/UX design, dan implementasi database. Selalu antusias merancang antarmuka yang user-friendly dan sistem yang efisien.";
 
-            const dummySkills = ["HTML & CSS", "JavaScript", "Python", "Figma", "WordPress", "MySQL"];
+            const dummySkills = [
+              {nama: "Python", icon: "fab fa-python"}, {nama: "MySQL", icon: "fas fa-database"},
+              {nama: "JavaScript", icon: "fab fa-js"}, {nama: "Figma", icon: "fab fa-figma"}
+            ];
             document.getElementById('skills-container').innerHTML = dummySkills.map(s => `
                 <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
                 <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-brand-500 group-hover:text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl transition-colors duration-300">
-                    <i class="fa-solid fa-bolt"></i>
+                    <i class="${s.icon}"></i>
                 </div>
-                <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s}</h3>
+                <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s.nama}</h3>
                 </div>
             `).join('');
 
@@ -262,113 +345,25 @@
                     <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">Asisten dosen untuk mata kuliah Dasar Pemrograman Sistem Informasi (DPSI) dan Arsitektur Enterprise.</p>
                 </div>
                 </div>
-                <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
-                <div class="hidden md:block md:w-1/2 text-right pt-2">
-                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Head of People Development</h3>
-                    <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">ISACA Student Group &bull; 2025</p>
-                </div>
-                <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-900 transform md:-translate-x-1/2 z-10 top-2 md:top-3 group-hover:bg-brand-500 transition-colors duration-300"></div>
-                <div class="absolute left-[7px] md:left-1/2 top-4 bottom-[-56px] w-[2px] bg-slate-200 dark:bg-slate-800 transform md:-translate-x-1/2 -z-10 group-last:hidden"></div>
-                <div class="md:w-1/2 bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div class="md:hidden mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Head of People Development</h3>
-                    <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">ISACA Student Group &bull; 2025</p>
-                    </div>
-                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">Mengkoordinir pengembangan SDM dan mengelola acara-acara kemahasiswaan tingkat fakultas maupun regional.</p>
-                </div>
-                </div>
             `;
 
             document.getElementById('projects-container').innerHTML = `
-                <div class="bg-white dark:bg-slate-800 rounded-3xl p-10 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
-                <div class="w-14 h-14 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 text-xl group-hover:bg-brand-500 group-hover:text-white group-hover:border-transparent transition-colors duration-300">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Website Coffee Shop</h3>
-                <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">Pengembangan website menggunakan WordPress dan Elementor. Mencakup perancangan struktur website dan integrasi link edukasi interaktif.</p>
-                <div class="flex flex-wrap gap-2 mt-auto">
-                    <span class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide shadow-sm"><i class="fa-solid fa-link mr-1"></i> fore-.com</span>
-                </div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-3xl p-10 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
-                <div class="w-14 h-14 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 text-xl group-hover:bg-brand-500 group-hover:text-white group-hover:border-transparent transition-colors duration-300">
-                    <i class="fa-solid fa-database"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Hospital Database System</h3>
-                <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">Implementasi sistem basis data SQL operasional rumah sakit dengan penyesuaian khusus pada entitas pasien, memastikan pencatatan rekam medis berjalan lancar.</p>
+                <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
+                  <div class="h-48 w-full bg-slate-100 dark:bg-slate-700 overflow-hidden flex items-center justify-center border-b border-slate-100 dark:border-slate-700">
+                      <i class="fa-solid fa-layer-group text-4xl text-slate-300 dark:text-slate-600"></i>
+                  </div>
+                  <div class="p-8 flex-1 flex flex-col">
+                      <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 transition-colors">Website Coffee Shop</h3>
+                      <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">Pengembangan website menggunakan WordPress dan Elementor. Mencakup perancangan struktur website.</p>
+                      <div class="flex flex-wrap gap-2 mt-auto">
+                        <a href="https://fore-.com" target="_blank" class="bg-brand-50 hover:bg-brand-100 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-sm transition-colors"><i class="fa-solid fa-link mr-1"></i> fore-.com</a>
+                      </div>
+                  </div>
                 </div>
             `;
-        });
-
-      function renderInitialData() {
-        if (!portfolioData) return;
-        const p = portfolioData.profil;
-        
-        const hName = document.getElementById('hero-name');
-        hName.innerText = p.nama;
-        hName.classList.remove('animate-pulse');
-
-        const skillsContainer = document.getElementById('skills-container');
-        skillsContainer.innerHTML = portfolioData.skills.map((s, idx) => `
-          <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
-            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-brand-500 group-hover:text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl transition-colors duration-300">
-              <i class="${s.icon ? s.icon : 'fa-solid fa-bolt'}"></i>
-            </div>
-            <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s.nama_skill}</h3>
-          </div>
-        `).join('');
-
-        renderDynamicBilingualContent();
       }
 
-      function renderDynamicBilingualContent() {
-        if (!portfolioData) return;
-        const p = portfolioData.profil;
-        
-        const roleHtml = currentLang === 'id' 
-            ? `Mahasiswa Sistem Informasi <br class="md:hidden"/> di <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>` 
-            : `Information Systems Student <br class="md:hidden"/> at <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>`;
-        
-        document.getElementById('hero-role').innerHTML = roleHtml;
-        document.getElementById('about-desc').innerText = p.deskripsi;
-
-        const expContainer = document.getElementById('exp-container');
-        expContainer.innerHTML = portfolioData.pengalaman.map((e, index) => `
-          <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
-            <div class="hidden md:block md:w-1/2 text-right pt-2">
-              <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">${e.jabatan}</h3>
-              <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
-            </div>
-            <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-900 transform md:-translate-x-1/2 z-10 top-2 md:top-3 group-hover:bg-brand-500 transition-colors duration-300"></div>
-            <div class="absolute left-[7px] md:left-1/2 top-4 bottom-[-56px] w-[2px] bg-slate-200 dark:bg-slate-800 transform md:-translate-x-1/2 -z-10 group-last:hidden"></div>
-            <div class="md:w-1/2 bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300">
-               <div class="md:hidden mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                 <h3 class="text-xl font-bold text-slate-900 dark:text-white">${e.jabatan}</h3>
-                 <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
-               </div>
-               <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">${e.deskripsi}</p>
-            </div>
-          </div>
-        `).join('');
-
-        const projContainer = document.getElementById('projects-container');
-        
-        projContainer.innerHTML = portfolioData.proyek.map((project, i) => `
-          <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
-            <div class="h-48 w-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
-                ${project.gambar ? `<img src="${project.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-image text-4xl text-slate-300 dark:text-slate-600"></i></div>`}
-            </div>
-            <div class="p-8 flex-1 flex flex-col">
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 transition-colors">${project.judul}</h3>
-                <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">${project.deskripsi}</p>
-                <div class="flex flex-wrap gap-2 mt-auto">
-                ${project.link_proyek ? `<a href="${project.link_proyek}" target="_blank" class="bg-brand-50 hover:bg-brand-100 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-sm transition-colors"><i class="fa-solid fa-link mr-1"></i> Buka Project</a>` : ''}
-                </div>
-            </div>
-          </div>
-        `).join('');
-      }
-
+      // --- LOGIKA FORM KONTAK/PESAN ---
       const contactForm = document.getElementById('contact-form');
       const btnSubmit = document.getElementById('btn-submit');
       const alertBox = document.getElementById('alert-box');
@@ -386,28 +381,19 @@
         };
 
         fetch('/api/kirim-pesan', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
+          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
         })
-        .then(res => res.json())
-        .then(res => {
+        .then(res => res.json()).then(res => {
            alertBox.className = "mb-8 p-4 rounded-xl text-sm font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 flex items-center gap-3";
            alertBox.innerHTML = '<i class="fa-solid fa-check-circle text-lg"></i> <span>' + (res.message || (currentLang === 'id' ? 'Pesan berhasil dikirim! Terima kasih.' : 'Message sent successfully! Thank you.')) + '</span>';
-           contactForm.reset();
-           setTimeout(() => { alertBox.className = "hidden"; }, 6000);
+           contactForm.reset(); setTimeout(() => { alertBox.className = "hidden"; }, 6000);
         })
         .catch(err => {
-           // MOCK SUCCESS UNTUK GITHUB PAGES (Biar Keliatan Keren)
            alertBox.className = "mb-8 p-4 rounded-xl text-sm font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 flex items-center gap-3";
            alertBox.innerHTML = '<i class="fa-solid fa-check-circle text-lg"></i> <span>' + (currentLang === 'id' ? '[DEMO] Pesan terkirim secara simulasi. Mode asli aktif di localhost.' : '[DEMO] Message sent in simulation mode.') + '</span>';
-           contactForm.reset();
-           setTimeout(() => { alertBox.className = "hidden"; }, 6000);
+           contactForm.reset(); setTimeout(() => { alertBox.className = "hidden"; }, 6000);
         })
-        .finally(() => {
-           btnSubmit.innerText = originalText;
-           btnSubmit.disabled = false;
-        });
+        .finally(() => { btnSubmit.innerText = originalText; btnSubmit.disabled = false; });
       });
     });
   </script>
