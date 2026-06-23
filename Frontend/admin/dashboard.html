@@ -1,303 +1,670 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - YFP Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
-</head>
-<body class="bg-slate-900 text-slate-300 min-h-screen flex hidden" id="body-content">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YFP.Admin - Dashboard Ultra Premium</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            sidebar: '#0f172a', /* Deep Midnight Navy */
+            surface: '#f8fafc', /* Slate 50 */
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     
-    <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col h-screen fixed z-20">
-        <div class="h-20 flex items-center px-8 border-b border-slate-700">
-            <h2 class="text-2xl font-extrabold text-white tracking-tighter">YFP<span class="text-indigo-500">.Admin</span></h2>
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .toggle-checkbox:checked { right: 0; border-color: #4f46e5; }
+    .toggle-checkbox:checked + .toggle-label { background-color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-surface text-slate-800 flex h-screen w-screen overflow-hidden antialiased hidden" id="body-content">
+
+  <aside class="w-20 md:w-64 bg-sidebar flex flex-col shrink-0 z-30 shadow-2xl transition-all duration-300">
+    <div class="h-20 flex items-center justify-center md:justify-start md:px-8 border-b border-slate-800 shrink-0">
+      <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-indigo-600/30">Y</div>
+      <h1 class="text-white font-bold text-xl tracking-tight ml-3 hidden md:block">YFP<span class="text-indigo-400">.Admin</span></h1>
+    </div>
+    
+    <nav class="flex-1 py-6 px-3 md:px-4 space-y-1.5 overflow-y-auto">
+      <button onclick="switchTab('dashboard')" data-target="dashboard" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/25">
+        <i class="fas fa-layer-group w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Dashboard</span>
+      </button>
+
+      <div class="pt-4 pb-1 hidden md:block"><p class="px-4 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Portofolio CRUD</p></div>
+
+      <button onclick="switchTab('experience')" data-target="experience" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-briefcase w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Experience</span>
+      </button>
+
+      <button onclick="switchTab('projects')" data-target="projects" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-folder-open w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Projects</span>
+      </button>
+
+      <button onclick="switchTab('skills')" data-target="skills" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-bolt w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Skills</span>
+      </button>
+
+      <div class="pt-4 pb-1 hidden md:block"><p class="px-4 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Pro & Analitik</p></div>
+
+      <button onclick="switchTab('inbox')" data-target="inbox" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium relative">
+        <i class="fas fa-envelope w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Pesan Masuk</span>
+        <span id="badge-inbox" class="absolute right-3 top-3 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden md:inline-block">0</span>
+      </button>
+
+      <button onclick="switchTab('analytics')" data-target="analytics" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-chart-pie w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Statistik Web</span>
+      </button>
+
+      <button onclick="switchTab('seo')" data-target="seo" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-gear w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">SEO & Pengaturan</span>
+      </button>
+
+      <div class="pt-4 pb-1 hidden md:block"><p class="px-4 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Sistem</p></div>
+
+      <button onclick="switchTab('akun')" data-target="akun" class="nav-btn group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white font-medium">
+        <i class="fas fa-user-circle w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Akun & Profil ID</span>
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800 shrink-0">
+      <button onclick="confirmLogout()" class="w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 font-semibold">
+        <i class="fas fa-sign-out-alt w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Keluar</span>
+      </button>
+    </div>
+  </aside>
+
+  <main id="main-container" class="flex-1 h-full overflow-y-auto w-full relative">
+    <div class="max-w-6xl mx-auto p-6 md:p-10 lg:p-12 pb-28">
+
+      <section id="tab-dashboard" class="tab-content active">
+        <header class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight" id="dash-greeting">Selamat Datang! 👋</h2>
+            <p class="text-slate-500 mt-1.5 font-normal">Panel administrasi mahakarya portofolio premium Anda.</p>
+          </div>
+          <div class="flex items-center gap-3 bg-white p-2 md:px-4 md:py-2.5 rounded-2xl border border-slate-200 shadow-sm self-start sm:self-auto">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&bold=true" id="dash-avatar" class="w-10 h-10 rounded-xl object-cover shadow-sm">
+            <div class="pr-2 hidden sm:block">
+              <p class="text-sm font-bold text-slate-900 leading-tight" id="dash-name">Admin Utama</p>
+              <p class="text-xs text-indigo-600 font-semibold">Lead Developer &bull; Online</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Total Pengalaman</p><h3 class="text-3xl font-extrabold text-slate-900" id="dash-count-exp">0</h3></div>
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-inner"><i class="fas fa-briefcase"></i></div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Total Proyek</p><h3 class="text-3xl font-extrabold text-slate-900" id="dash-count-proj">0</h3></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl shadow-inner"><i class="fas fa-folder-open"></i></div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Total Skills</p><h3 class="text-3xl font-extrabold text-slate-900" id="dash-count-skill">0</h3></div>
+            <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl shadow-inner"><i class="fas fa-bolt"></i></div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="switchTab('inbox')">
+            <div class="flex items-center justify-between">
+              <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Pesan Masuk</p><h3 class="text-3xl font-extrabold text-slate-900"><span id="dash-count-inbox">0</span> <span class="text-xs text-rose-500 font-bold ml-1 animate-pulse">&bull; Baru</span></h3></div>
+              <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl shadow-inner"><i class="fas fa-envelope"></i></div>
+            </div>
+          </div>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="#" id="menu-profil" class="sidebar-menu flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-400 rounded-xl font-bold transition-colors">
-                <i class="fa-solid fa-user w-5"></i> Profil Utama
-            </a>
-            <a href="#" id="menu-proyek" class="sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors">
-                <i class="fa-solid fa-layer-group w-5"></i> Kelola Proyek
-            </a>
-        </nav>
-        <div class="p-4 border-t border-slate-700">
-            <button id="btn-logout" class="flex items-center gap-3 px-4 py-3 w-full text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-xl font-bold transition-colors">
-                <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Keluar
+
+        <div class="mb-12">
+          <h3 class="text-lg font-bold text-slate-900 mb-4">Pintas Aksi Cepat</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <button onclick="switchTab('experience')" class="bg-white border border-slate-200 hover:border-indigo-500 hover:ring-2 hover:ring-indigo-50 hover:shadow rounded-2xl p-4 flex items-center gap-4 transition-all text-left">
+              <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-plus"></i></div>
+              <div><h4 class="font-bold text-slate-800 text-sm">Tambah Pengalaman</h4><p class="text-xs text-slate-500 mt-0.5">Catat jabatan & karir baru</p></div>
             </button>
+            <button onclick="switchTab('projects')" class="bg-white border border-slate-200 hover:border-indigo-500 hover:ring-2 hover:ring-indigo-50 hover:shadow rounded-2xl p-4 flex items-center gap-4 transition-all text-left">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-plus"></i></div>
+              <div><h4 class="font-bold text-slate-800 text-sm">Tambah Proyek Pro</h4><p class="text-xs text-slate-500 mt-0.5">Publikasi aplikasi terbaru</p></div>
+            </button>
+            <button onclick="switchTab('skills')" class="bg-white border border-slate-200 hover:border-indigo-500 hover:ring-2 hover:ring-indigo-50 hover:shadow rounded-2xl p-4 flex items-center gap-4 transition-all text-left">
+              <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-plus"></i></div>
+              <div><h4 class="font-bold text-slate-800 text-sm">Tambah Skill</h4><p class="text-xs text-slate-500 mt-0.5">Perbarui stack teknologi</p></div>
+            </button>
+          </div>
         </div>
-    </aside>
+      </section>
 
-    <main class="flex-1 ml-64 p-8">
+      <section id="tab-experience" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kelola Pengalaman (Experience)</h2><p class="text-slate-500 mt-1.5">Isi form di bawah untuk menambah atau memperbarui riwayat organisasi Anda.</p></header>
+
+        <div class="space-y-10">
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm" id="form-card-exp">
+            <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2.5 pb-4 border-b border-slate-100"><i class="fas fa-briefcase text-indigo-600"></i> Form Data Pengalaman</h3>
+            <form id="form-exp" onsubmit="submitFormAPI(event, '/api/admin/pengalaman')">
+              <input type="hidden" id="e-id" name="id" value="">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Periode Kerja <span class="text-rose-500">*</span></label><input type="text" id="e-periode" name="periode" required placeholder="Contoh: Jan 2025 - Sekarang" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-600/10"></div>
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Jabatan / Posisi <span class="text-rose-500">*</span></label><input type="text" id="e-jabatan" name="jabatan" required placeholder="Contoh: Teaching Assistant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-600/10"></div>
+              </div>
+              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Perusahaan / Organisasi <span class="text-rose-500">*</span></label><input type="text" id="e-perusahaan" name="perusahaan" required placeholder="Contoh: UKSW" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-600/10"></div>
+              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Deskripsi & Pencapaian</label><textarea id="e-deskripsi" name="deskripsi" rows="3" placeholder="Jelaskan peran Anda..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-600/10 resize-none"></textarea></div>
+              <div class="flex justify-end pt-2"><button type="submit" id="btn-submit-exp" class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all"><i class="fas fa-save mr-2"></i> Simpan Data</button></div>
+            </form>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 mb-4">Daftar Pengalaman Aktif</h3>
+            <div id="list-exp" class="space-y-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-projects" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kelola Proyek (Projects)</h2><p class="text-slate-500 mt-1.5">Publikasikan karya web modern dan aplikasi unggulan Anda ke galeri utama.</p></header>
+
+        <div class="space-y-10">
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm" id="form-card-proj">
+            <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2.5 pb-4 border-b border-slate-100"><i class="fas fa-folder-open text-emerald-600"></i> Form Entry Proyek</h3>
+            <form id="form-proj">
+              <input type="hidden" id="p-id" name="id" value="">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Judul Proyek <span class="text-rose-500">*</span></label><input type="text" id="p-judul" required placeholder="Contoh: Hospital Database System" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Link Web / Demo</label><input type="url" id="p-link" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
+              </div>
+              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Deskripsi Lengkap Proyek <span class="text-rose-500">*</span></label><textarea id="p-deskripsi" rows="3" required placeholder="Jelaskan proyek ini..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm resize-none focus:ring-2 focus:ring-indigo-600 outline-none"></textarea></div>
+              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Foto Proyek (File Upload Cloudinary)</label><input type="file" id="p-gambar" accept="image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-sm text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-slate-700 file:text-white cursor-pointer"></div>
+              <div class="flex justify-end pt-2"><button type="submit" id="btn-save-proj" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition-all"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload & Simpan</button></div>
+            </form>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 mb-4">Galeri Proyek Terpublikasi</h3>
+            <div id="grid-proj" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-skills" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Keahlian (Skills)</h2><p class="text-slate-500 mt-1.5">Manajemen ikon bahasa pemrograman dan alat.</p></header>
         
-        <div id="section-profil" class="content-section">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h1 class="text-3xl font-bold text-white">Kelola Profil</h1>
-                    <p class="text-slate-400 mt-1">Ubah nama dan deskripsi utama portofolio lo di sini.</p>
-                </div>
-                <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-user-tie"></i>
-                </div>
-            </header>
-
-            <div class="bg-slate-800 p-8 rounded-[2rem] border border-slate-700 shadow-xl max-w-3xl">
-                <div id="profil-alert" class="hidden mb-6 p-4 rounded-xl text-sm font-bold flex items-center gap-3"></div>
-                <form id="form-profil" class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nama Lengkap</label>
-                        <input type="text" id="input-nama" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-semibold transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Deskripsi Utama</label>
-                        <textarea id="input-deskripsi" rows="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white font-medium transition-all resize-none"></textarea>
-                    </div>
-                    <div class="pt-4 border-t border-slate-700">
-                        <button type="submit" id="btn-save-profil" class="bg-indigo-600 text-white font-bold uppercase tracking-widest text-sm px-8 py-4 rounded-xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30">
-                            <i class="fa-solid fa-save mr-2"></i> Simpan Profil
-                        </button>
-                    </div>
-                </form>
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-10" id="form-card-skill">
+          <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2.5 pb-4 border-b border-slate-100"><i class="fas fa-bolt text-purple-600"></i> Form Skill Baru</h3>
+          <form id="form-skill" onsubmit="submitFormAPI(event, '/api/admin/skills')">
+            <input type="hidden" id="s-id" name="id" value="">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+              <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Teknologi <span class="text-rose-500">*</span></label><input type="text" id="s-nama" name="nama" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
+              <div><label class="block text-sm font-semibold text-slate-700 mb-1.5 flex justify-between"><span>Kelas Ikon FontAwesome <span class="text-rose-500">*</span></span><a href="https://fontawesome.com/icons" target="_blank" class="text-indigo-600 text-xs hover:underline">Referensi</a></label><input type="text" id="s-icon" name="icon" placeholder="Contoh: fab fa-python" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none font-mono"></div>
             </div>
+            <div class="flex justify-end pt-2"><button type="submit" id="btn-submit-skill" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition-all"><i class="fas fa-save mr-2"></i> Simpan Skill</button></div>
+          </form>
         </div>
 
-        <div id="section-proyek" class="content-section hidden">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h1 class="text-3xl font-bold text-white">Kelola Proyek</h1>
-                    <p class="text-slate-400 mt-1">Tambah, lihat, atau hapus proyek portofolio lo (Terintegrasi Cloudinary).</p>
-                </div>
-                <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-laptop-code"></i>
-                </div>
-            </header>
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Grid Keahlian Saat Ini</h3>
+        <div id="grid-skill" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4"></div>
+      </section>
 
-            <div class="grid lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-1">
-                    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-xl">
-                        <h3 class="text-lg font-bold text-white mb-6 border-b border-slate-700 pb-4">Tambah Proyek Baru</h3>
-                        <div id="proyek-alert" class="hidden mb-4 p-3 rounded-lg text-xs font-bold"></div>
-                        <form id="form-proyek" class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Judul Proyek</label>
-                                <input type="text" id="p-judul" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Deskripsi</label>
-                                <textarea id="p-deskripsi" rows="3" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white resize-none"></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Link Proyek (Opsional)</label>
-                                <input type="text" id="p-link" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Upload Gambar (Cloudinary)</label>
-                                <input type="file" id="p-gambar" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-500/10 file:text-indigo-400 hover:file:bg-indigo-500/20 cursor-pointer">
-                            </div>
-                            <button type="submit" id="btn-save-proyek" class="w-full mt-4 bg-indigo-600 text-white font-bold uppercase tracking-widest text-xs py-3 rounded-lg hover:bg-indigo-500 transition-all">
-                                Upload & Simpan
-                            </button>
-                        </form>
-                    </div>
-                </div>
+      <section id="tab-inbox" class="tab-content">
+        <header class="mb-8 flex justify-between items-end">
+          <div><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kotak Masuk</h2><p class="text-slate-500 mt-1.5">Pesan dari pengunjung form contact website Anda.</p></div>
+          <button onclick="loadSemuaData()" class="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-slate-50"><i class="fas fa-sync-alt mr-2"></i>Refresh</button>
+        </header>
+        <div id="list-inbox" class="space-y-4 max-w-4xl"></div>
+      </section>
 
-                <div class="lg:col-span-2">
-                    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-xl min-h-[400px]">
-                        <h3 class="text-lg font-bold text-white mb-6 border-b border-slate-700 pb-4">Daftar Proyek</h3>
-                        <div id="list-proyek" class="space-y-4">
-                            <div class="text-center text-slate-500 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl"></i></div>
-                        </div>
-                    </div>
-                </div>
+      <section id="tab-analytics" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Statistik Web & Analitik</h2><p class="text-slate-500 mt-1.5">Pantau metrik trafik pengunjung situs portofolio Anda secara real-time ala dasbor SaaS.</p></header>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-white rounded-3xl border border-slate-200 p-7 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-6 flex items-center justify-between"><span><i class="fas fa-chart-line text-indigo-600 mr-2"></i> Pengunjung Bulan Ini</span><span class="text-xs bg-emerald-50 text-emerald-600 font-extrabold px-2 py-1 rounded">+24.8% Naik</span></h3>
+            <div class="space-y-4 font-sans text-xs">
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-600">Minggu Ke-1</span><span class="text-slate-900">124 View</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-indigo-500 h-full rounded-full w-[45%]"></div></div></div>
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-600">Minggu Ke-2</span><span class="text-slate-900">210 View</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-indigo-500 h-full rounded-full w-[65%]"></div></div></div>
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-600">Minggu Ke-3</span><span class="text-slate-900">345 View</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-indigo-600 h-full rounded-full w-[85%] animate-pulse"></div></div></div>
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-600">Minggu Ke-4 (Berjalan)</span><span class="text-slate-900">98 View</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-indigo-400 h-full rounded-full w-[38%]"></div></div></div>
             </div>
+          </div>
+          <div class="bg-white rounded-3xl border border-slate-200 p-7 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-6"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> Asal Kota Pengunjung</h3>
+            <div class="space-y-4 font-sans text-xs">
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-700">Jakarta (Recruiter)</span><span class="text-slate-900">68%</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-blue-600 h-full rounded-full w-[68%]"></div></div></div>
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-700">Semarang (Tech Company)</span><span class="text-slate-900">16%</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full w-[16%]"></div></div></div>
+              <div><div class="flex justify-between font-bold mb-1"><span class="text-slate-700">Salatiga (Lokal)</span><span class="text-slate-900">9%</span></div><div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-blue-400 h-full rounded-full w-[9%]"></div></div></div>
+            </div>
+          </div>
         </div>
+      </section>
 
-    </main>
-
-    <script>
-        // --- 1. SESSION CHECKER (Telah Disesuaikan untuk GitHub Pages) ---
-        fetch('/api/check-session')
-            .then(res => res.json())
-            .then(data => {
-                // Berhasil jalan di localhost
-                if(data.status === 'success') {
-                    document.getElementById('body-content').classList.remove('hidden');
-                    loadProfilData();
-                    loadProyekData();
-                } else { 
-                    // Kalau gagal tapi dari localhost
-                    window.location.href = '/admin'; 
-                }
-            })
-            .catch(() => {
-                // MODE PAJANGAN GITHUB PAGES (Backend Mati)
-                document.getElementById('body-content').classList.remove('hidden');
-                
-                // Isi dummy data biar gak kosong melompong
-                document.getElementById('input-nama').value = "Yosua Fredrik Pratama";
-                document.getElementById('input-deskripsi').value = "Mahasiswa Sistem Informasi di Universitas Kristen Satya Wacana dengan ketertarikan mendalam pada pengembangan website, UI/UX design, dan implementasi database.";
-                
-                const list = document.getElementById('list-proyek');
-                list.innerHTML = `
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-rose-500/30 flex gap-4 items-center">
-                        <div class="w-20 h-20 bg-rose-500/10 rounded-xl flex items-center justify-center text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <div class="flex-1">
-                            <h4 class="text-rose-400 font-bold">Mode GitHub Pages Statis</h4>
-                            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Ini adalah mode demonstrasi UI. Untuk menggunakan fitur CRUD, koneksi database, dan upload Cloudinary, jalankan melalui Python localhost:5000.</p>
-                        </div>
-                    </div>
-                `;
-            });
-
-        // --- 2. MENU SWITCHER LOGIC ---
-        const menuProfil = document.getElementById('menu-profil');
-        const menuProyek = document.getElementById('menu-proyek');
-        const secProfil = document.getElementById('section-profil');
-        const secProyek = document.getElementById('section-proyek');
-
-        function switchMenu(activeMenu, activeSection, inactiveMenu, inactiveSection) {
-            activeSection.classList.remove('hidden');
-            inactiveSection.classList.add('hidden');
-            activeMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 bg-indigo-500/10 text-indigo-400 rounded-xl font-bold transition-colors";
-            inactiveMenu.className = "sidebar-menu flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-xl font-medium transition-colors";
-        }
-
-        menuProfil.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProfil, secProfil, menuProyek, secProyek); });
-        menuProyek.addEventListener('click', (e) => { e.preventDefault(); switchMenu(menuProyek, secProyek, menuProfil, secProfil); });
-
-        // --- 3. LOGIC PROFIL ---
-        function loadProfilData() {
-            fetch('/api/admin/profil').then(res => res.json()).then(data => {
-                if(data.status === 'success' && data.data) {
-                    document.getElementById('input-nama').value = data.data.nama;
-                    document.getElementById('input-deskripsi').value = data.data.deskripsi;
-                }
-            });
-        }
-
-        document.getElementById('form-profil').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-save-profil');
-            const alertBox = document.getElementById('profil-alert');
-            btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
-
-            fetch('/api/admin/profil', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nama: document.getElementById('input-nama').value,
-                    deskripsi: document.getElementById('input-deskripsi').value
-                })
-            }).then(res => res.json()).then(data => {
-                alertBox.classList.remove('hidden');
-                alertBox.className = data.status === 'success' 
-                    ? "mb-6 p-4 rounded-xl text-sm font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                    : "mb-6 p-4 rounded-xl text-sm font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
-                alertBox.innerText = data.message;
-                setTimeout(() => alertBox.classList.add('hidden'), 3000);
-            }).catch(() => {
-                // MOCK SUCCESS UNTUK GITHUB PAGES
-                alertBox.classList.remove('hidden');
-                alertBox.className = "mb-6 p-4 rounded-xl text-sm font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20";
-                alertBox.innerText = "Fitur Simpan hanya aktif di backend localhost.";
-                setTimeout(() => alertBox.classList.add('hidden'), 3000);
-            }).finally(() => { btn.innerHTML = '<i class="fa-solid fa-save mr-2"></i> Simpan Profil'; btn.disabled = false; });
-        });
-
-        // --- 4. LOGIC PROYEK (CRUD + CLOUDINARY) ---
-        function loadProyekData() {
-            fetch('/api/admin/proyek').then(res => res.json()).then(data => {
-                const list = document.getElementById('list-proyek');
-                list.innerHTML = '';
-                if(data.status === 'success' && data.data.length > 0) {
-                    data.data.forEach(p => {
-                        list.innerHTML += `
-                            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-700 flex gap-4 items-center">
-                                ${p.gambar ? `<img src="${p.gambar}" class="w-20 h-20 object-cover rounded-xl border border-slate-600">` : `<div class="w-20 h-20 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600"><i class="fa-solid fa-image"></i></div>`}
-                                <div class="flex-1">
-                                    <h4 class="text-white font-bold">${p.judul}</h4>
-                                    <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.deskripsi}</p>
-                                </div>
-                                <button onclick="deleteProyek(${p.id})" class="w-10 h-10 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl transition-colors flex items-center justify-center">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                    });
-                } else {
-                    list.innerHTML = '<p class="text-center text-slate-500 py-10">Belum ada proyek ditambahkan.</p>';
-                }
-            });
-        }
-
-        document.getElementById('form-proyek').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-save-proyek');
-            const alertBox = document.getElementById('proyek-alert');
-            const fileInput = document.getElementById('p-gambar');
+      <section id="tab-seo" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">SEO & Pengaturan Web</h2><p class="text-slate-500 mt-1.5">Konfigurasi meta penelusuran Google dan kendali mode pemeliharaan sistem.</p></header>
+        <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm max-w-2xl">
+          <form id="form-seo" onsubmit="submitFormAPI(event, '/api/settings')">
+            <div class="mb-5"><label class="block text-sm font-bold text-slate-700 mb-2">Judul Website (Meta Title)</label><input type="text" id="seo-title" name="title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-600 outline-none font-medium"></div>
+            <div class="mb-5"><label class="block text-sm font-bold text-slate-700 mb-2">Deskripsi Penelusuran (Meta Description)</label><textarea id="seo-desc" name="deskripsi" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-600 outline-none resize-none"></textarea></div>
+            <div class="mb-5"><label class="block text-sm font-bold text-slate-700 mb-2">Google Analytics Tracking ID</label><input type="text" id="seo-track" name="analytics_id" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-mono focus:ring-2 focus:ring-indigo-600 outline-none"></div>
             
-            btn.innerText = 'Mengunggah...'; btn.disabled = true;
+            <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-6">
+              <div><h4 class="font-bold text-slate-900 text-sm">Mode Perbaikan (Maintenance Mode)</h4><p class="text-xs text-slate-500 mt-0.5">Sembunyikan web dari publik saat melakukan maintenance server.</p></div>
+              <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in shrink-0"><input type="checkbox" id="toggle-maint" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-200"/><label for="toggle-maint" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-200"></label></div>
+            </div>
+            <div class="flex justify-end pt-4 border-t border-slate-100"><button type="submit" id="btn-save-seo" class="px-8 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xl transition-all flex items-center"><i class="fas fa-check-shield mr-2"></i> Simpan Pengaturan</button></div>
+          </form>
+        </div>
+      </section>
 
-            try {
-                let imageUrl = '';
-                if (fileInput.files.length > 0) {
-                    const formData = new FormData();
-                    formData.append('file', fileInput.files[0]);
-                    const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: formData });
-                    const uploadData = await uploadRes.json();
-                    if (uploadData.status === 'success') { imageUrl = uploadData.url; } 
-                    else { throw new Error("Gagal upload gambar: " + uploadData.message); }
-                }
+      <section id="tab-akun" class="tab-content">
+        <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Pengaturan Akun & Profil ID</h2><p class="text-slate-500 mt-1.5">Kelola identitas personal dan profil portofolio Anda.</p></header>
 
-                btn.innerText = 'Menyimpan Data...';
-                const dbRes = await fetch('/api/admin/proyek', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        judul: document.getElementById('p-judul').value,
-                        deskripsi: document.getElementById('p-deskripsi').value,
-                        link_proyek: document.getElementById('p-link').value,
-                        gambar: imageUrl
-                    })
-                });
-                const dbData = await dbRes.json();
+        <div class="space-y-10">
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm">
+            <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2.5 pb-4 border-b border-slate-100"><i class="fas fa-user-edit text-indigo-600"></i> Form Data Personal (Live DB)</h3>
+            <form id="form-datadiri">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-600 outline-none"></div>
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1">Email Pribadi</label><input type="email" id="input-email" value="682024104@student.uksw.edu" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none"></div>
+              </div>
+              <div class="mb-5"><label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi Utama Profil</label><textarea id="input-deskripsi" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm resize-none focus:ring-2 focus:ring-indigo-600 outline-none" required></textarea></div>
+              <div class="pt-2 pb-1"><hr class="border-slate-100"></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                <div class="md:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Universitas</label><input type="text" id="input-univ" value="Universitas Kristen Satya Wacana (UKSW)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none"></div>
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1">Program Studi</label><input type="text" value="Sistem Informasi" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none"></div>
+              </div>
+              <div class="flex justify-end pt-3"><button type="submit" id="btn-save-profil" class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center"><i class="fas fa-save mr-2"></i> Simpan Data Diri</button></div>
+            </form>
+          </div>
 
-                if (dbData.status === 'success') {
-                    document.getElementById('form-proyek').reset();
-                    loadProyekData(); 
-                    alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400";
-                    alertBox.innerText = "Proyek berhasil ditambahkan!";
-                } else { throw new Error(dbData.message); }
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i class="fas fa-id-card text-indigo-600"></i> Preview Kartu Identitas Digital</h3>
+            <div id="digital-id-card" class="bg-gradient-to-br from-slate-900 via-[#1e1b4b] to-indigo-950 rounded-3xl p-8 md:p-10 text-white shadow-2xl border border-indigo-500/30 max-w-2xl relative overflow-hidden">
+              <div class="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none"></div>
+              <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8 z-10 relative">
+                <div class="w-32 h-32 rounded-2xl border-4 border-white/20 shadow-2xl overflow-hidden shrink-0 bg-indigo-600"><img id="id-card-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=256&bold=true" class="w-full h-full object-cover"></div>
+                <div class="flex-1 text-center sm:text-left space-y-3">
+                  <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-wider text-indigo-200"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> VERIFIED DEVELOPER</div>
+                  <h4 id="prev-nama" class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Nama</h4>
+                  <p id="prev-desc" class="text-sm font-medium text-indigo-300 line-clamp-3">Deskripsi...</p>
+                  <div class="pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300 font-sans">
+                    <div class="flex items-center gap-2 justify-center sm:justify-start"><i class="fas fa-envelope text-indigo-400"></i> <span id="prev-email">682024104@student.uksw.edu</span></div>
+                    <div class="flex items-center gap-2 justify-center sm:justify-start"><i class="fas fa-building text-emerald-400"></i> <span id="prev-univ">UKSW</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            } catch (err) {
-                // MOCK ERROR GITHUB PAGES
-                alertBox.className = "mb-4 p-3 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20";
-                alertBox.innerText = "Fitur Upload & Database hanya jalan di localhost.";
-            } finally {
-                alertBox.classList.remove('hidden');
-                setTimeout(() => alertBox.classList.add('hidden'), 4000);
-                btn.innerText = 'Upload & Simpan'; btn.disabled = false;
+    </div>
+  </main>
+
+  <div id="toast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300 transform translate-y-24 opacity-0 z-50 border border-slate-700">
+    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm shrink-0" id="toast-icon"><i class="fas fa-check"></i></div>
+    <span id="toast-msg" class="text-sm font-bold tracking-wide">Sukses</span>
+  </div>
+
+  <script>
+    // 1. SWITCH TAB LOGIC
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-target') === tabId) {
+          btn.className = "nav-btn bg-indigo-500/10 text-indigo-400 font-semibold group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all border border-indigo-500/20";
+        } else {
+          btn.className = "nav-btn text-slate-400 hover:bg-slate-800 hover:text-white group w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all";
+        }
+      });
+      document.getElementById('main-container').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 2. TOAST LOGIC
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      const icon = document.getElementById('toast-icon');
+      if(isError) {
+          t.classList.replace('border-slate-700', 'border-rose-500/50');
+          icon.className = "w-8 h-8 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0";
+          icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+      } else {
+          t.classList.replace('border-rose-500/50', 'border-slate-700');
+          icon.className = "w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0";
+          icon.innerHTML = '<i class="fas fa-check"></i>';
+      }
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000);
+    }
+
+    // 3. FETCH DATA AWAL DARI BACKEND
+    fetch('/api/check-session').then(res => res.json()).then(data => {
+        if(data.status === 'success') {
+            document.getElementById('body-content').classList.remove('hidden');
+            loadSemuaData();
+        } else { window.location.href = '/admin'; }
+    }).catch(() => { 
+        document.getElementById('body-content').classList.remove('hidden'); 
+        showToast("Mode Github Pages (Mock Data)"); 
+        loadMockData(); // Panggil fungsi mock data kalau di github.io
+    });
+
+    function loadSemuaData() {
+        // Load Profil
+        fetch('/api/admin/profil').then(res => res.json()).then(data => {
+            if(data.data) {
+                document.getElementById('input-nama').value = data.data.nama;
+                document.getElementById('input-deskripsi').value = data.data.deskripsi;
+                document.getElementById('dash-greeting').innerText = `Halo, ${data.data.nama.split(' ')[0]}! 👋`;
+                document.getElementById('dash-name').innerText = data.data.nama;
+                document.getElementById('dash-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.data.nama)}&background=4f46e5&color=fff&bold=true`;
+                
+                document.getElementById('prev-nama').innerText = data.data.nama;
+                document.getElementById('prev-desc').innerText = data.data.deskripsi;
+                document.getElementById('id-card-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.data.nama)}&background=4f46e5&color=fff&size=256&bold=true`;
             }
         });
 
-        function deleteProyek(id) {
-            if(confirm("Yakin mau hapus proyek ini?")) {
-                fetch(`/api/admin/proyek/${id}`, { method: 'DELETE' })
-                    .then(res => res.json())
-                    .then(data => {
-                        if(data.status === 'success') loadProyekData();
-                        else alert("Gagal menghapus: " + data.message);
-                    });
+        // Load Setting/SEO
+        fetch('/api/settings').then(res => res.json()).then(data => {
+            if(data.data) {
+                document.getElementById('seo-title').value = data.data.title;
+                document.getElementById('seo-desc').value = data.data.deskripsi;
+                document.getElementById('seo-track').value = data.data.analytics_id || '';
+                document.getElementById('toggle-maint').checked = !!data.data.maintenance_mode;
             }
+        });
+
+        // Load Pengalaman
+        fetch('/api/admin/pengalaman').then(res => res.json()).then(data => {
+            const list = document.getElementById('list-exp'); list.innerHTML = '';
+            document.getElementById('dash-count-exp').innerText = data.data ? data.data.length : 0;
+            if(data.data) {
+                data.data.forEach(x => {
+                    list.innerHTML += `
+                    <div class="crud-card bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4" data-id="exp-${x.id}">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 mt-0.5"><i class="fas fa-building"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900 card-title">${x.jabatan}</h4>
+                                <p class="text-sm font-semibold text-indigo-600 card-comp">${x.perusahaan}</p>
+                                <p class="text-xs text-slate-500 mt-1 card-period bg-slate-100 px-2 py-0.5 rounded w-fit">${x.periode}</p>
+                                <p class="text-sm text-slate-600 mt-3 leading-relaxed card-desc">${x.deskripsi}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 self-end sm:self-center shrink-0">
+                            <button type="button" onclick="editData('exp', ${x.id})" class="px-3 py-2 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100 font-bold text-xs transition-colors flex items-center gap-1.5 border border-amber-200/60"><i class="fas fa-pen"></i> Edit</button>
+                            <button type="button" onclick="hapusData('/api/admin/pengalaman/${x.id}')" class="px-3 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold text-xs transition-colors flex items-center gap-1.5 border border-rose-200/60"><i class="fas fa-trash"></i> Hapus</button>
+                        </div>
+                    </div>`;
+                });
+            }
+        });
+
+        // Load Skill
+        fetch('/api/admin/skills').then(res => res.json()).then(data => {
+            const list = document.getElementById('grid-skill'); list.innerHTML = '';
+            document.getElementById('dash-count-skill').innerText = data.data ? data.data.length : 0;
+            if(data.data) {
+                data.data.forEach(x => {
+                    list.innerHTML += `
+                    <div class="crud-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col items-center justify-center shadow-sm hover:border-indigo-400 transition-all" data-id="skill-${x.id}">
+                        <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-3xl text-slate-700 mb-3"><i class="${x.icon} card-icon"></i></div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-4 card-title">${x.nama_skill}</h4>
+                        <div class="w-full flex justify-center gap-2 pt-3 border-t border-slate-100">
+                            <button type="button" onclick="editData('skill', ${x.id})" class="flex-1 py-1 rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 font-bold text-[11px] transition-colors">Edit</button>
+                            <button type="button" onclick="hapusData('/api/admin/skills/${x.id}')" class="flex-1 py-1 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 font-bold text-[11px] transition-colors">Hapus</button>
+                        </div>
+                    </div>`;
+                });
+            }
+        });
+
+        // Load Proyek
+        fetch('/api/admin/proyek').then(res => res.json()).then(data => {
+            const list = document.getElementById('grid-proj'); list.innerHTML = '';
+            document.getElementById('dash-count-proj').innerText = data.data ? data.data.length : 0;
+            if(data.data && data.data.length > 0) {
+                data.data.forEach(x => {
+                    list.innerHTML += `
+                    <div class="crud-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col" data-id="proj-${x.id}">
+                        <div class="h-44 bg-slate-100 flex items-center justify-center relative border-b border-slate-200">
+                            ${x.gambar ? `<img src="${x.gambar}" class="w-full h-full object-cover">` : `<i class="fas fa-image text-5xl text-slate-300"></i>`}
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h4 class="font-extrabold text-xl text-slate-900 mb-2 line-clamp-1 card-title">${x.judul}</h4>
+                            <p class="text-sm text-slate-500 mb-4 line-clamp-2 card-desc">${x.deskripsi}</p>
+                            <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-auto">
+                                ${x.link_proyek ? `<a href="${x.link_proyek}" target="_blank" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 card-link"><i class="fas fa-link mr-1"></i> Link Web</a>` : '<span class="card-link hidden"></span>'}
+                                <div class="flex gap-2">
+                                  <button type="button" onclick="editData('proj', ${x.id})" class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 font-bold text-xs transition-colors"><i class="fas fa-pen"></i> Edit</button>
+                                  <button type="button" onclick="hapusData('/api/admin/proyek/${x.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold text-xs transition-colors"><i class="fas fa-trash"></i> Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            } else { list.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400"><i class="fas fa-folder-open text-3xl mb-3 block"></i>Belum ada proyek.</div>`; }
+        });
+
+        // Load Inbox
+        fetch('/api/admin/inbox').then(res => res.json()).then(data => {
+            const list = document.getElementById('list-inbox'); list.innerHTML = ''; let unread = 0;
+            if(data.data) {
+                data.data.forEach(x => {
+                    if(!x.is_read) unread++;
+                    list.innerHTML += `
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm relative ${x.is_read ? 'opacity-60' : ''}">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${x.is_read ? 'bg-slate-300' : 'bg-indigo-600'} rounded-l-2xl"></div>
+                        <div class="pl-2">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-sm uppercase">${x.nama_pengirim.charAt(0)}</span>
+                                <div><h4 class="font-bold text-slate-900">${x.nama_pengirim}</h4><p class="text-xs text-slate-500">${x.email_pengirim}</p></div>
+                            </div>
+                            <p class="text-sm text-slate-600 mt-3 bg-slate-50 p-3 rounded-lg border border-slate-100">${x.pesan}</p>
+                            <div class="mt-4 flex gap-2 items-center">
+                                ${!x.is_read ? `<button onclick="bacaInbox(${x.id})" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold text-xs transition-colors"><i class="fas fa-check-double mr-1 text-slate-400"></i> Tandai Dibaca</button>` : `<span class="text-xs text-emerald-600 font-bold px-3 py-1.5 bg-emerald-50 rounded-lg"><i class="fas fa-check mr-1"></i> Dibaca</span>`}
+                                <a href="mailto:${x.email_pengirim}" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 font-bold text-xs transition-colors inline-flex items-center"><i class="fas fa-reply mr-1"></i> Balas</a>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+            document.getElementById('dash-count-inbox').innerText = unread;
+            const b = document.getElementById('badge-inbox'); if(unread>0){b.classList.remove('hidden'); b.innerText=unread;}else{b.classList.add('hidden');}
+        });
+    }
+
+    // FUNGSI LOAD DATA PALSU UNTUK GITHUB PAGES (Mockup)
+    function loadMockData() {
+        document.getElementById('dash-count-exp').innerText = "2";
+        document.getElementById('dash-count-proj').innerText = "2";
+        document.getElementById('dash-count-skill').innerText = "4";
+        
+        document.getElementById('input-nama').value = "Yosua Fredrik Pratama";
+        document.getElementById('input-deskripsi').value = "Mahasiswa Sistem Informasi UKSW.";
+
+        // Mock Pengalaman
+        document.getElementById('list-exp').innerHTML = `
+            <div class="crud-card bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4" data-id="exp-mock1">
+                <div class="flex gap-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 mt-0.5"><i class="fas fa-building"></i></div><div><h4 class="text-lg font-bold text-slate-900 card-title">Teaching Assistant</h4><p class="text-sm font-semibold text-indigo-600 card-comp">UKSW</p><p class="text-xs text-slate-500 mt-1 card-period bg-slate-100 px-2 py-0.5 rounded w-fit">2025</p><p class="text-sm text-slate-600 mt-3 leading-relaxed card-desc">Asdos DPSI.</p></div></div>
+                <div class="flex gap-2 self-end sm:self-center shrink-0"><button type="button" onclick="editData('exp', 'mock1')" class="px-3 py-2 rounded-xl bg-amber-50 text-amber-600 font-bold text-xs transition-colors"><i class="fas fa-pen"></i> Edit</button></div>
+            </div>`;
+            
+        // Mock Skill
+        document.getElementById('grid-skill').innerHTML = `
+            <div class="crud-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col items-center justify-center shadow-sm" data-id="skill-mock1">
+                <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-3xl text-slate-700 mb-3"><i class="fab fa-python card-icon"></i></div><h4 class="font-bold text-slate-800 text-sm mb-4 card-title">Python</h4>
+                <div class="w-full flex justify-center gap-2 pt-3 border-t border-slate-100"><button type="button" onclick="editData('skill', 'mock1')" class="flex-1 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-[11px] transition-colors">Edit</button></div>
+            </div>`;
+    }
+
+    // 4. SUBMIT FORM UNIVERSAL (Experience, Skills, SEO)
+    function submitFormAPI(e, url) {
+        e.preventDefault(); 
+        const form = e.target; 
+        const btn = form.querySelector('button[type="submit"]'); 
+        const origText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...'; 
+        btn.disabled = true;
+
+        const payload = {};
+        new FormData(form).forEach((value, key) => { payload[key] = value; });
+        const maintToggle = form.querySelector('#toggle-maint');
+        if (maintToggle) payload['maintenance'] = maintToggle.checked;
+
+        // Cek kalau di Github pages, disimulasikan saja
+        if(window.location.hostname.includes('github.io')) {
+            setTimeout(() => {
+                showToast("Simulasi Simpan Berhasil!");
+                form.reset();
+                btn.innerHTML = origText; btn.disabled = false;
+            }, 1000);
+            return;
         }
 
-        // --- 5. LOGOUT LOGIC ---
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            fetch('/api/logout', { method: 'POST' }).then(() => window.location.href = '/admin')
-            .catch(() => alert("Berjalan di mode statis, logout tidak diperlukan."));
+        fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) })
+        .then(res => res.json()).then(data => {
+            if(data.status === 'success') { 
+                showToast("Data berhasil disimpan ke Database!"); 
+                form.reset(); 
+                const idField = form.querySelector('input[name="id"]');
+                if(idField) idField.value = '';
+                
+                // Kembalikan desain tombol Edit ke bentuk awal
+                if (btn.classList.contains('bg-amber-600')) {
+                    btn.classList.replace('bg-amber-600', 'bg-indigo-600');
+                    btn.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+                    btn.innerHTML = `<i class="fas fa-save mr-2"></i> Simpan Data`;
+                }
+                loadSemuaData(); 
+            } else { showToast(data.message, true); }
+        }).catch(err => showToast("Gagal terhubung ke database.", true))
+        .finally(() => { 
+            if(!btn.classList.contains('bg-amber-600')) btn.innerHTML = origText; 
+            btn.disabled = false; 
         });
-    </script>
+    }
+
+    // SUBMIT PROYEK KHUSUS (CLOUDINARY)
+    document.getElementById('form-proj').addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        const btn = document.getElementById('btn-save-proj'); 
+        const origText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...'; 
+        btn.disabled = true;
+
+        if(window.location.hostname.includes('github.io')) {
+            setTimeout(() => { showToast("Simulasi Upload Berhasil!"); e.target.reset(); btn.innerHTML = origText; btn.disabled = false; }, 1500); return;
+        }
+
+        try {
+            let img = ''; const fileInput = document.getElementById('p-gambar');
+            if (fileInput.files.length > 0) {
+                const fd = new FormData(); fd.append('file', fileInput.files[0]);
+                const upRes = await fetch('/api/admin/upload', { method: 'POST', body: fd }); const upData = await upRes.json();
+                if(upData.status === 'success') img = upData.url; else throw new Error("Gagal upload gambar");
+            }
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan ke TiDB...';
+            const dbRes = await fetch('/api/admin/proyek', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ id: document.getElementById('p-id').value, judul: document.getElementById('p-judul').value, deskripsi: document.getElementById('p-deskripsi').value, link_proyek: document.getElementById('p-link').value, gambar: img }) });
+            const dbData = await dbRes.json();
+            
+            if(dbData.status === 'success') { 
+                showToast("Proyek Tersimpan!"); 
+                e.target.reset(); 
+                document.getElementById('p-id').value = ''; 
+                
+                if (btn.classList.contains('bg-amber-600')) {
+                    btn.classList.replace('bg-amber-600', 'bg-indigo-600');
+                    btn.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+                    btn.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i> Upload & Simpan`;
+                }
+                loadSemuaData(); 
+            } else throw new Error(dbData.message);
+        } catch (err) { showToast(err.message, true); } 
+        finally { if(!btn.classList.contains('bg-amber-600')) btn.innerHTML = origText; btn.disabled = false; }
+    });
+
+    // 5. DELETE & INBOX
+    function hapusData(url) { 
+        if(window.location.hostname.includes('github.io')) { showToast("Simulasi Hapus Data"); return; }
+        if(confirm("Hapus data secara permanen dari Database?")) fetch(url, {method: 'DELETE'}).then(() => { showToast("Data Dihapus!"); loadSemuaData(); }); 
+    }
+    function bacaInbox(id) { fetch(`/api/admin/inbox/read/${id}`, {method: 'POST'}).then(() => loadSemuaData()); }
+
+    // 6. EDIT FITUR (MENARIK DATA KE ATAS FORM)
+    function editData(type, id) {
+        if(type === 'exp') {
+            const card = document.querySelector(`.crud-card[data-id="exp-${id}"]`);
+            if(!card) return;
+            document.getElementById('e-id').value = id;
+            document.getElementById('e-jabatan').value = card.querySelector('.card-title').innerText;
+            document.getElementById('e-perusahaan').value = card.querySelector('.card-comp').innerText;
+            document.getElementById('e-periode').value = card.querySelector('.card-period').innerText;
+            document.getElementById('e-deskripsi').value = card.querySelector('.card-desc').innerText;
+            
+            document.getElementById('tab-experience').scrollIntoView({behavior: 'smooth'});
+            const btn = document.getElementById('btn-submit-exp');
+            btn.innerHTML = '<i class="fas fa-save mr-2"></i> Update Pengalaman';
+            btn.classList.replace('bg-indigo-600', 'bg-amber-600');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
+            showToast("Mode Edit Aktif! Silakan perbarui data form.");
+        } 
+        else if (type === 'skill') {
+            const card = document.querySelector(`.crud-card[data-id="skill-${id}"]`);
+            if(!card) return;
+            document.getElementById('s-id').value = id;
+            document.getElementById('s-nama').value = card.querySelector('.card-title').innerText;
+            const iconClass = card.querySelector('.card-icon').className;
+            document.getElementById('s-icon').value = iconClass.replace('card-icon', '').trim();
+            
+            document.getElementById('tab-skills').scrollIntoView({behavior: 'smooth'});
+            const btn = document.getElementById('btn-submit-skill');
+            btn.innerHTML = '<i class="fas fa-save mr-2"></i> Update Skill';
+            btn.classList.replace('bg-indigo-600', 'bg-amber-600');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
+            showToast("Mode Edit Aktif! Silakan perbarui skill.");
+        }
+        else if (type === 'proj') {
+            const card = document.querySelector(`.crud-card[data-id="proj-${id}"]`);
+            if(!card) return;
+            document.getElementById('p-id').value = id;
+            document.getElementById('p-judul').value = card.querySelector('.card-title').innerText;
+            document.getElementById('p-deskripsi').value = card.querySelector('.card-desc').innerText;
+            const linkEl = card.querySelector('.card-link');
+            document.getElementById('p-link').value = linkEl ? linkEl.href : '';
+            
+            document.getElementById('tab-projects').scrollIntoView({behavior: 'smooth'});
+            const btn = document.getElementById('btn-save-proj');
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i> Update Proyek';
+            btn.classList.replace('bg-emerald-600', 'bg-amber-600');
+            btn.classList.replace('hover:bg-emerald-500', 'hover:bg-amber-700');
+            showToast("Mode Edit Aktif! (Biarkan file gambar kosong jika tidak diubah).");
+        }
+    }
+
+    function confirmLogout() { if(confirm("Keluar dari Admin Panel?")) { window.location.href = '/admin'; } }
+  </script>
 </body>
 </html>

@@ -40,7 +40,8 @@
 
   <nav class="fixed top-0 w-full z-50 glass border-b border-slate-200 dark:border-white/5 transition-all duration-300">
     <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="#hero" class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors">YFP.</a>
+      <a href="#" onclick="window.location.href = window.location.hostname.includes('github.io') ? 'Frontend/admin/login.html' : '/admin'; return false;" class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors" title="Masuk ke Admin Panel">YFP.</a>
+      
       <div class="flex items-center gap-4 md:hidden">
         <button id="mobileThemeToggle" class="text-slate-500 dark:text-slate-400 hover:text-brand-600 focus:outline-none transition-colors">
           <i class="fa-solid fa-moon dark:hidden text-lg"></i>
@@ -216,7 +217,7 @@
         renderDynamicBilingualContent();
       });
 
-      // --- Fetch Data from Backend API (Dengan Trik Khusus GitHub Pages) ---
+      // --- LOGIKA FETCH DATA UTAMA (TIDB vs GITHUB PAGES) ---
       fetch('/api/data')
         .then(res => res.json())
         .then(res => {
@@ -226,10 +227,8 @@
           }
         })
         .catch(err => {
-            // MODE PAJANGAN GITHUB PAGES (Memasukkan Dummy Data Asli Lo)
-            console.warn("Menjalankan dalam Mode Statis (GitHub Pages).");
+            console.warn("Mode Github Pages: Memuat Dummy Data");
 
-            // 1. Data Profil Statis
             document.getElementById('hero-name').innerText = "Yosua Fredrik Pratama";
             document.getElementById('hero-name').classList.remove('animate-pulse');
             document.getElementById('hero-role').innerHTML = currentLang === 'id' 
@@ -237,7 +236,6 @@
                 : 'Information Systems Student <br class="md:hidden"/> at <strong class="text-brand-600 dark:text-brand-400 font-bold">Universitas Kristen Satya Wacana (UKSW)</strong>';
             document.getElementById('about-desc').innerText = "Mahasiswa Sistem Informasi di Universitas Kristen Satya Wacana dengan ketertarikan mendalam pada pengembangan website, UI/UX design, dan implementasi database. Selalu antusias merancang antarmuka yang user-friendly dan sistem yang efisien.";
 
-            // 2. Data Skills Statis
             const dummySkills = ["HTML & CSS", "JavaScript", "Python", "Figma", "WordPress", "MySQL"];
             document.getElementById('skills-container').innerHTML = dummySkills.map(s => `
                 <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
@@ -248,7 +246,6 @@
                 </div>
             `).join('');
 
-            // 3. Data Pengalaman Statis
             document.getElementById('exp-container').innerHTML = `
                 <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
                 <div class="hidden md:block md:w-1/2 text-right pt-2">
@@ -282,7 +279,6 @@
                 </div>
             `;
 
-            // 4. Data Proyek Statis
             document.getElementById('projects-container').innerHTML = `
                 <div class="bg-white dark:bg-slate-800 rounded-3xl p-10 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
                 <div class="w-14 h-14 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 text-xl group-hover:bg-brand-500 group-hover:text-white group-hover:border-transparent transition-colors duration-300">
@@ -316,7 +312,7 @@
         skillsContainer.innerHTML = portfolioData.skills.map((s, idx) => `
           <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-8 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none group">
             <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-brand-500 group-hover:text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl transition-colors duration-300">
-              <i class="fa-solid fa-bolt"></i>
+              <i class="${s.icon ? s.icon : 'fa-solid fa-bolt'}"></i>
             </div>
             <h3 class="font-bold text-slate-800 dark:text-white text-lg">${s.nama_skill}</h3>
           </div>
@@ -340,15 +336,15 @@
         expContainer.innerHTML = portfolioData.pengalaman.map((e, index) => `
           <div class="relative pl-10 md:pl-0 md:flex items-start gap-12 group mb-14 last:mb-0">
             <div class="hidden md:block md:w-1/2 text-right pt-2">
-              <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">${e.posisi}</h3>
-              <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.institusi} &bull; ${e.tahun}</p>
+              <h3 class="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">${e.jabatan}</h3>
+              <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
             </div>
             <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-900 transform md:-translate-x-1/2 z-10 top-2 md:top-3 group-hover:bg-brand-500 transition-colors duration-300"></div>
             <div class="absolute left-[7px] md:left-1/2 top-4 bottom-[-56px] w-[2px] bg-slate-200 dark:bg-slate-800 transform md:-translate-x-1/2 -z-10 group-last:hidden"></div>
             <div class="md:w-1/2 bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300">
                <div class="md:hidden mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                 <h3 class="text-xl font-bold text-slate-900 dark:text-white">${e.posisi}</h3>
-                 <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.institusi} &bull; ${e.tahun}</p>
+                 <h3 class="text-xl font-bold text-slate-900 dark:text-white">${e.jabatan}</h3>
+                 <p class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-xs mt-2">${e.perusahaan} &bull; ${e.periode}</p>
                </div>
                <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base">${e.deskripsi}</p>
             </div>
@@ -356,17 +352,18 @@
         `).join('');
 
         const projContainer = document.getElementById('projects-container');
-        const icons = ['fa-layer-group', 'fa-database'];
         
         projContainer.innerHTML = portfolioData.proyek.map((project, i) => `
-          <div class="bg-white dark:bg-slate-800 rounded-3xl p-10 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
-            <div class="w-14 h-14 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl flex items-center justify-center mb-6 text-slate-600 dark:text-slate-300 text-xl group-hover:bg-brand-500 group-hover:text-white transition-colors duration-300">
-              <i class="fa-solid ${icons[i%2]}"></i>
+          <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:-translate-y-1 transition-transform duration-300 group relative flex flex-col h-full shadow-sm hover:shadow-lg dark:hover:shadow-none">
+            <div class="h-48 w-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                ${project.gambar ? `<img src="${project.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-image text-4xl text-slate-300 dark:text-slate-600"></i></div>`}
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 transition-colors">${project.judul}</h3>
-            <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">${project.deskripsi}</p>
-            <div class="flex flex-wrap gap-2 mt-auto">
-              ${project.link_proyek ? `<span class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide shadow-sm"><i class="fa-solid fa-link mr-1"></i> ${project.link_proyek}</span>` : ''}
+            <div class="p-8 flex-1 flex flex-col">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 transition-colors">${project.judul}</h3>
+                <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed text-base flex-grow">${project.deskripsi}</p>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                ${project.link_proyek ? `<a href="${project.link_proyek}" target="_blank" class="bg-brand-50 hover:bg-brand-100 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-sm transition-colors"><i class="fa-solid fa-link mr-1"></i> Buka Project</a>` : ''}
+                </div>
             </div>
           </div>
         `).join('');
