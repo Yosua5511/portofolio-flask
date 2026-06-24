@@ -44,6 +44,7 @@
 </head>
 <body class="bg-surface text-slate-800 flex h-screen w-screen overflow-hidden antialiased hidden" id="body-content">
 
+  <!-- ================= SIDEBAR ================= -->
   <aside class="w-20 md:w-64 bg-sidebar flex flex-col shrink-0 z-30 shadow-2xl transition-all duration-300">
     <div class="h-20 flex items-center justify-center md:justify-start md:px-8 border-b border-slate-800 shrink-0">
       <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-indigo-600/30">Y</div>
@@ -92,15 +93,17 @@
     </nav>
 
     <div class="p-4 border-t border-slate-800 shrink-0">
-      <button onclick="confirmLogout()" class="w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 font-semibold">
+      <button onclick="confirmLogout()" class="w-full flex items-center justify-center md:justify-start gap-3.5 px-3 md:px-4 py-3 rounded-xl transition-all duration-200 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 font-semibold">
         <i class="fas fa-sign-out-alt w-5 text-center text-lg md:text-base"></i><span class="hidden md:block">Keluar</span>
       </button>
     </div>
   </aside>
 
+  <!-- ================= MAIN CONTENT ================= -->
   <main id="main-container" class="flex-1 h-full overflow-y-auto w-full relative">
     <div class="max-w-6xl mx-auto p-6 md:p-10 lg:p-12 pb-28">
 
+      <!-- TAB 1: DASHBOARD -->
       <section id="tab-dashboard" class="tab-content active">
         <header class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -156,6 +159,7 @@
         </div>
       </section>
 
+      <!-- TAB 2: EXPERIENCE -->
       <section id="tab-experience" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kelola Pengalaman (Experience)</h2><p class="text-slate-500 mt-1.5">Isi form di bawah untuk menambah atau memperbarui riwayat organisasi Anda.</p></header>
 
@@ -181,6 +185,7 @@
         </div>
       </section>
 
+      <!-- TAB 3: PROJECTS -->
       <section id="tab-projects" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kelola Proyek (Projects)</h2><p class="text-slate-500 mt-1.5">Publikasikan karya web modern dan aplikasi unggulan Anda ke galeri utama.</p></header>
 
@@ -191,10 +196,10 @@
               <input type="hidden" id="p-id" name="id" value="">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                 <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Judul Proyek <span class="text-rose-500">*</span></label><input type="text" id="p-judul" required placeholder="Contoh: Hospital Database System" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
-                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Link Web / Demo</label><input type="url" id="p-link" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
+                <div><label class="block text-sm font-semibold text-slate-700 mb-1.5">Link Web / Demo</label><input type="url" id="p-link" placeholder="https://fore-.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none"></div>
               </div>
               <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Deskripsi Lengkap Proyek <span class="text-rose-500">*</span></label><textarea id="p-deskripsi" rows="3" required placeholder="Jelaskan proyek ini..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm resize-none focus:ring-2 focus:ring-indigo-600 outline-none"></textarea></div>
-              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Foto Proyek (File Upload Cloudinary)</label><input type="file" id="p-gambar" accept="image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-sm text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-slate-700 file:text-white cursor-pointer"></div>
+              <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-1.5">Foto Proyek (File Upload Cloudinary)</label><input type="file" id="p-gambar" accept="image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-sm text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:text-indigo-600 cursor-pointer"></div>
               <div class="flex justify-end pt-2"><button type="submit" id="btn-save-proj" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition-all"><i class="fas fa-cloud-upload-alt mr-2"></i> Upload & Simpan</button></div>
             </form>
           </div>
@@ -206,6 +211,7 @@
         </div>
       </section>
 
+      <!-- TAB 4: SKILLS -->
       <section id="tab-skills" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Keahlian (Skills)</h2><p class="text-slate-500 mt-1.5">Manajemen ikon bahasa pemrograman dan alat.</p></header>
         
@@ -225,6 +231,7 @@
         <div id="grid-skill" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4"></div>
       </section>
 
+      <!-- TAB 5: INBOX -->
       <section id="tab-inbox" class="tab-content">
         <header class="mb-8 flex justify-between items-end">
           <div><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kotak Masuk</h2><p class="text-slate-500 mt-1.5">Pesan dari pengunjung form contact website Anda.</p></div>
@@ -233,6 +240,7 @@
         <div id="list-inbox" class="space-y-4 max-w-4xl"></div>
       </section>
 
+      <!-- TAB 6: ANALYTICS -->
       <section id="tab-analytics" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Statistik Web & Analitik</h2><p class="text-slate-500 mt-1.5">Pantau metrik trafik pengunjung situs portofolio Anda secara real-time ala dasbor SaaS.</p></header>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -256,6 +264,7 @@
         </div>
       </section>
 
+      <!-- TAB 7: SEO -->
       <section id="tab-seo" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">SEO & Pengaturan Web</h2><p class="text-slate-500 mt-1.5">Konfigurasi meta penelusuran Google dan kendali mode pemeliharaan sistem.</p></header>
         <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm max-w-2xl">
@@ -266,13 +275,14 @@
             
             <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-6">
               <div><h4 class="font-bold text-slate-900 text-sm">Mode Perbaikan (Maintenance Mode)</h4><p class="text-xs text-slate-500 mt-0.5">Sembunyikan web dari publik saat melakukan maintenance server.</p></div>
-              <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in shrink-0"><input type="checkbox" id="toggle-maint" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-200"/><label for="toggle-maint" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-200"></label></div>
+              <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in shrink-0"><input type="checkbox" id="toggle-maint" name="maintenance" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-200"/><label for="toggle-maint" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-200"></label></div>
             </div>
             <div class="flex justify-end pt-4 border-t border-slate-100"><button type="submit" id="btn-save-seo" class="px-8 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xl transition-all flex items-center"><i class="fas fa-check-shield mr-2"></i> Simpan Pengaturan</button></div>
           </form>
         </div>
       </section>
 
+      <!-- TAB 8: AKUN / PROFIL -->
       <section id="tab-akun" class="tab-content">
         <header class="mb-8"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Pengaturan Akun & Profil ID</h2><p class="text-slate-500 mt-1.5">Kelola identitas personal dan profil portofolio Anda.</p></header>
 
@@ -318,6 +328,7 @@
     </div>
   </main>
 
+  <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3.5 transition-all duration-300 transform translate-y-24 opacity-0 z-50 border border-slate-700">
     <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm shrink-0" id="toast-icon"><i class="fas fa-check"></i></div>
     <span id="toast-msg" class="text-sm font-bold tracking-wide">Sukses</span>
@@ -358,7 +369,7 @@
       setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000);
     }
 
-    // 3. FETCH DATA AWAL DARI BACKEND
+    // 3. FETCH DATA AWAL DARI BACKEND ATAU MOCKUP
     fetch('/api/check-session').then(res => res.json()).then(data => {
         if(data.status === 'success') {
             document.getElementById('body-content').classList.remove('hidden');
@@ -367,7 +378,7 @@
     }).catch(() => { 
         document.getElementById('body-content').classList.remove('hidden'); 
         showToast("Mode Github Pages (Mock Data)"); 
-        loadMockData(); // Panggil fungsi mock data kalau di github.io
+        loadMockData(); // Panggil data tiruan yang super lengkap
     });
 
     function loadSemuaData() {
@@ -376,7 +387,7 @@
             if(data.data) {
                 document.getElementById('input-nama').value = data.data.nama;
                 document.getElementById('input-deskripsi').value = data.data.deskripsi;
-                document.getElementById('dash-greeting').innerText = `Halo, ${data.data.nama.split(' ')[0]}! 👋`;
+                document.getElementById('dash-greeting').innerText = `Selamat Datang, ${data.data.nama.split(' ')[0]}! 👋`;
                 document.getElementById('dash-name').innerText = data.data.nama;
                 document.getElementById('dash-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.data.nama)}&background=4f46e5&color=fff&bold=true`;
                 
@@ -496,28 +507,88 @@
         });
     }
 
-    // FUNGSI LOAD DATA PALSU UNTUK GITHUB PAGES (Mockup)
+    // --- MOCKUP LENGKAP UNTUK GITHUB PAGES ---
     function loadMockData() {
-        document.getElementById('dash-count-exp').innerText = "2";
+        // Angka Dashboard
+        document.getElementById('dash-count-exp').innerText = "4";
         document.getElementById('dash-count-proj').innerText = "2";
-        document.getElementById('dash-count-skill').innerText = "4";
+        document.getElementById('dash-count-skill').innerText = "6";
         
+        // Data Profil
         document.getElementById('input-nama').value = "Yosua Fredrik Pratama";
-        document.getElementById('input-deskripsi').value = "Mahasiswa Sistem Informasi UKSW.";
+        document.getElementById('input-deskripsi').value = "Mahasiswa Sistem Informasi di Universitas Kristen Satya Wacana dengan ketertarikan mendalam pada pengembangan website, UI/UX design, dan implementasi database. Selalu antusias merancang antarmuka yang user-friendly dan sistem yang efisien.";
 
-        // Mock Pengalaman
-        document.getElementById('list-exp').innerHTML = `
-            <div class="crud-card bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4" data-id="exp-mock1">
-                <div class="flex gap-4"><div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 mt-0.5"><i class="fas fa-building"></i></div><div><h4 class="text-lg font-bold text-slate-900 card-title">Teaching Assistant</h4><p class="text-sm font-semibold text-indigo-600 card-comp">UKSW</p><p class="text-xs text-slate-500 mt-1 card-period bg-slate-100 px-2 py-0.5 rounded w-fit">2025</p><p class="text-sm text-slate-600 mt-3 leading-relaxed card-desc">Asdos DPSI.</p></div></div>
-                <div class="flex gap-2 self-end sm:self-center shrink-0"><button type="button" onclick="editData('exp', 'mock1')" class="px-3 py-2 rounded-xl bg-amber-50 text-amber-600 font-bold text-xs transition-colors"><i class="fas fa-pen"></i> Edit</button></div>
-            </div>`;
-            
-        // Mock Skill
-        document.getElementById('grid-skill').innerHTML = `
-            <div class="crud-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col items-center justify-center shadow-sm" data-id="skill-mock1">
-                <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-3xl text-slate-700 mb-3"><i class="fab fa-python card-icon"></i></div><h4 class="font-bold text-slate-800 text-sm mb-4 card-title">Python</h4>
-                <div class="w-full flex justify-center gap-2 pt-3 border-t border-slate-100"><button type="button" onclick="editData('skill', 'mock1')" class="flex-1 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-[11px] transition-colors">Edit</button></div>
-            </div>`;
+        // Data Experience (4 Buah)
+        const mockExperiences = [
+            { id: "mock1", jabatan: "Asisten Dosen Pengantar Teknologi Informasi", perusahaan: "Universitas Kristen Satya Wacana (UKSW)", periode: "2025", deskripsi: "Membantu dosen dalam memfasilitasi kegiatan praktikum kelas, serta mendampingi mahasiswa dalam memahami konsep dasar teknologi informasi." },
+            { id: "mock2", jabatan: "Asisten Dosen Dasar Pemrograman Sistem Informasi", perusahaan: "Universitas Kristen Satya Wacana (UKSW)", periode: "2025", deskripsi: "Membimbing mahasiswa dalam memahami logika algoritma, perancangan flowchart, hingga implementasi struktur database secara teknis." },
+            { id: "mock3", jabatan: "Head of People Development", perusahaan: "ISACA Student Group", periode: "2025 - Sekarang", deskripsi: "Mengelola pengembangan kapasitas sumber daya mahasiswa dan memimpin koordinasi kepanitiaan acara komunitas regional (Mengan Balak) di Salatiga." },
+            { id: "mock4", jabatan: "Anggota Komisi Organisasi", perusahaan: "BPMF FTI UKSW", periode: "2026 - Sekarang", deskripsi: "Terlibat aktif dalam badan perwakilan mahasiswa fakultas, bertugas menyusun naskah orasi, mengatur seleksi komisi, dan mengawal dinamika keorganisasian mahasiswa FTI." }
+        ];
+
+        document.getElementById('list-exp').innerHTML = mockExperiences.map(e => `
+            <div class="crud-card bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4" data-id="exp-${e.id}">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 mt-0.5"><i class="fas fa-building"></i></div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-900 card-title">${e.jabatan}</h4>
+                        <p class="text-sm font-semibold text-indigo-600 card-comp">${e.perusahaan}</p>
+                        <p class="text-xs text-slate-500 mt-1 card-period bg-slate-100 px-2 py-0.5 rounded w-fit">${e.periode}</p>
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed card-desc">${e.deskripsi}</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 self-end sm:self-center shrink-0">
+                    <button type="button" onclick="editData('exp', '${e.id}')" class="px-3 py-2 rounded-xl bg-amber-50 text-amber-600 font-bold text-xs transition-colors border border-amber-200/60"><i class="fas fa-pen"></i> Edit</button>
+                    <button type="button" onclick="hapusData('mock')" class="px-3 py-2 rounded-xl bg-rose-50 text-rose-600 font-bold text-xs transition-colors border border-rose-200/60"><i class="fas fa-trash"></i> Hapus</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Data Skills (6 Buah)
+        const mockSkills = [
+            { id: "mock1", nama: "Python", icon: "fab fa-python" },
+            { id: "mock2", nama: "MySQL", icon: "fas fa-database" },
+            { id: "mock3", nama: "HTML & CSS", icon: "fab fa-html5" },
+            { id: "mock4", nama: "JavaScript", icon: "fab fa-js" },
+            { id: "mock5", nama: "Figma", icon: "fab fa-figma" },
+            { id: "mock6", nama: "WordPress", icon: "fab fa-wordpress" }
+        ];
+
+        document.getElementById('grid-skill').innerHTML = mockSkills.map(s => `
+            <div class="crud-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col items-center justify-center shadow-sm" data-id="skill-${s.id}">
+                <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-3xl text-slate-700 mb-3"><i class="${s.icon} card-icon"></i></div>
+                <h4 class="font-bold text-slate-800 text-sm mb-4 card-title">${s.nama}</h4>
+                <div class="w-full flex justify-center gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="editData('skill', '${s.id}')" class="flex-1 py-1 rounded-lg bg-amber-100 text-amber-800 font-bold text-[11px] transition-colors">Edit</button>
+                    <button type="button" onclick="hapusData('mock')" class="flex-1 py-1 rounded-lg bg-red-100 text-red-700 font-bold text-[11px] transition-colors">Hapus</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Data Proyek (2 Buah)
+        const mockProjects = [
+            { id: "mock1", judul: "Website Coffee Shop", deskripsi: "Pengembangan website menggunakan WordPress dan Elementor. Mencakup perancangan struktur website dan integrasi link edukasi interaktif.", icon: "fa-layer-group", link: "https://fore-.com" },
+            { id: "mock2", judul: "Hospital Database System", deskripsi: "Implementasi sistem basis data SQL operasional rumah sakit dengan penyesuaian khusus pada entitas pasien, memastikan pencatatan rekam medis berjalan lancar.", icon: "fa-database", link: "" }
+        ];
+
+        document.getElementById('grid-proj').innerHTML = mockProjects.map(p => `
+            <div class="crud-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col" data-id="proj-${p.id}">
+                <div class="h-44 bg-slate-100 flex items-center justify-center relative border-b border-slate-200">
+                    <i class="fas ${p.icon} text-5xl text-slate-300"></i>
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <h4 class="font-extrabold text-xl text-slate-900 mb-2 line-clamp-1 card-title">${p.judul}</h4>
+                    <p class="text-sm text-slate-500 mb-4 line-clamp-2 card-desc">${p.deskripsi}</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-auto">
+                        ${p.link ? `<a href="${p.link}" target="_blank" class="text-xs font-bold text-indigo-600 card-link"><i class="fas fa-link mr-1"></i> Link Web</a>` : '<span class="card-link hidden"></span>'}
+                        <div class="flex gap-2">
+                            <button type="button" onclick="editData('proj', '${p.id}')" class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 font-bold text-xs"><i class="fas fa-pen"></i> Edit</button>
+                            <button type="button" onclick="hapusData('mock')" class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 font-bold text-xs"><i class="fas fa-trash"></i> Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
     }
 
     // 4. SUBMIT FORM UNIVERSAL (Experience, Skills, SEO)
@@ -539,7 +610,14 @@
             setTimeout(() => {
                 showToast("Simulasi Simpan Berhasil!");
                 form.reset();
-                btn.innerHTML = origText; btn.disabled = false;
+                if (btn.classList.contains('bg-amber-600')) {
+                    btn.classList.replace('bg-amber-600', 'bg-indigo-600');
+                    btn.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+                    btn.innerHTML = `<i class="fas fa-save mr-2"></i> Simpan Data`;
+                } else {
+                    btn.innerHTML = origText;
+                }
+                btn.disabled = false;
             }, 1000);
             return;
         }
@@ -576,7 +654,19 @@
         btn.disabled = true;
 
         if(window.location.hostname.includes('github.io')) {
-            setTimeout(() => { showToast("Simulasi Upload Berhasil!"); e.target.reset(); btn.innerHTML = origText; btn.disabled = false; }, 1500); return;
+            setTimeout(() => { 
+                showToast("Simulasi Upload Berhasil!"); 
+                e.target.reset(); 
+                if (btn.classList.contains('bg-amber-600')) {
+                    btn.classList.replace('bg-amber-600', 'bg-indigo-600');
+                    btn.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+                    btn.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i> Upload & Simpan`;
+                } else {
+                    btn.innerHTML = origText;
+                }
+                btn.disabled = false; 
+            }, 1500); 
+            return;
         }
 
         try {
@@ -608,7 +698,7 @@
 
     // 5. DELETE & INBOX
     function hapusData(url) { 
-        if(window.location.hostname.includes('github.io')) { showToast("Simulasi Hapus Data"); return; }
+        if(window.location.hostname.includes('github.io')) { showToast("Simulasi Hapus Data Berhasil"); return; }
         if(confirm("Hapus data secara permanen dari Database?")) fetch(url, {method: 'DELETE'}).then(() => { showToast("Data Dihapus!"); loadSemuaData(); }); 
     }
     function bacaInbox(id) { fetch(`/api/admin/inbox/read/${id}`, {method: 'POST'}).then(() => loadSemuaData()); }
@@ -653,18 +743,18 @@
             document.getElementById('p-judul').value = card.querySelector('.card-title').innerText;
             document.getElementById('p-deskripsi').value = card.querySelector('.card-desc').innerText;
             const linkEl = card.querySelector('.card-link');
-            document.getElementById('p-link').value = linkEl ? linkEl.href : '';
+            document.getElementById('p-link').value = linkEl && !linkEl.classList.contains('hidden') ? linkEl.href : '';
             
             document.getElementById('tab-projects').scrollIntoView({behavior: 'smooth'});
             const btn = document.getElementById('btn-save-proj');
             btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i> Update Proyek';
-            btn.classList.replace('bg-emerald-600', 'bg-amber-600');
-            btn.classList.replace('hover:bg-emerald-500', 'hover:bg-amber-700');
+            btn.classList.replace('bg-indigo-600', 'bg-amber-600');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
             showToast("Mode Edit Aktif! (Biarkan file gambar kosong jika tidak diubah).");
         }
     }
 
-    function confirmLogout() { if(confirm("Keluar dari Admin Panel?")) { window.location.href = '/admin'; } }
+    function confirmLogout() { if(confirm("Keluar dari Admin Panel?")) { window.location.href = '/portofolio-flask/'; } }
   </script>
 </body>
 </html>
