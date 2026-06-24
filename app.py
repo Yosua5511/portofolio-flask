@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory
 from model import get_db_connection 
+from config import Config # <--- Tambahin import ini
 
 # Import Seluruh Blueprint Backend
 from Backend.utama.utama import utama_bp
@@ -7,10 +8,10 @@ from Backend.admin.login import login_bp
 from Backend.admin.upload import upload_bp 
 from Backend.admin.profiles import profiles_bp 
 from Backend.admin.projects import projects_bp 
-from Backend.admin.advanced import advanced_bp # <--- INI MESIN BARUNYA
+from Backend.admin.advanced import advanced_bp
 
 app = Flask(__name__, template_folder="Frontend", static_folder="Frontend")
-app.secret_key = "portofolio_rahasia_yosua"
+app.secret_key = Config.FLASK_SECRET_KEY # <--- Ubah baris ini
 
 # Daftarkan Seluruh Blueprint ke Aplikasi
 app.register_blueprint(utama_bp)
@@ -18,7 +19,7 @@ app.register_blueprint(login_bp)
 app.register_blueprint(upload_bp)
 app.register_blueprint(profiles_bp) 
 app.register_blueprint(projects_bp)
-app.register_blueprint(advanced_bp) # <--- DAFTARKAN MESIN BARUNYA
+app.register_blueprint(advanced_bp)
 
 @app.route('/')
 def home():
