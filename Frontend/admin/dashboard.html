@@ -754,7 +754,14 @@
         }
     }
 
-    function confirmLogout() { if(confirm("Keluar dari Admin Panel?")) { window.location.href = '/portofolio-flask/'; } }
+    function confirmLogout() { 
+        if(confirm("Keluar dari Admin Panel?")) {
+            fetch('/api/logout', { method: 'POST' })
+            .finally(() => {
+                window.location.replace('/admin');
+            });
+        } 
+    }
   </script>
 </body>
 </html>

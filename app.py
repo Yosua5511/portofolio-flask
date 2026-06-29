@@ -1,3 +1,4 @@
+import os
 from flask import Flask, send_from_directory
 from model import get_db_connection 
 from config import Config # <--- Tambahin import ini
@@ -23,7 +24,7 @@ app.register_blueprint(advanced_bp)
 
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(os.getcwd(), 'index.html')
 
 @app.route('/admin')
 def admin_login():
